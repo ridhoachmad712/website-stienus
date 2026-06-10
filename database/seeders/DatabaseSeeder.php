@@ -41,6 +41,8 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole($superAdminRole);
 
+        $this->call(MenuSeeder::class);
+
         $this->seedPrograms();
         $this->seedNews();
         $this->seedAgendas();

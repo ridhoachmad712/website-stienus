@@ -22,6 +22,7 @@ class AdminSmokeTest extends TestCase
             '/admin/posts',
             '/admin/applicants',
             '/admin/sliders',
+            '/admin/menu-items',
             '/admin/testimonials',
             '/admin/activities',
             '/admin/shield/roles',

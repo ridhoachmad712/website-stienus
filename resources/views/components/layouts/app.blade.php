@@ -51,37 +51,45 @@
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-700 antialiased">
     @php
-        $profileLinks = [
-            ['label' => 'Tentang Kami', 'route' => 'profile'],
-            ['label' => 'Sejarah', 'route' => 'profile.history'],
-            ['label' => 'Sambutan Pimpinan', 'route' => 'profile.leader'],
-            ['label' => 'Struktur Organisasi', 'route' => 'profile.structure'],
-        ];
-        $academicLinks = [
-            ['label' => 'Program Studi', 'route' => 'programs.index'],
-            ['label' => 'Direktori Dosen', 'route' => 'lecturers.index'],
-        ];
-        $simpleLinks = [
-            ['label' => 'Berita', 'route' => 'posts.index'],
-            ['label' => 'Agenda', 'route' => 'agenda.index'],
-            ['label' => 'Galeri', 'route' => 'gallery.index'],
-            ['label' => 'Unduhan', 'route' => 'downloads.index'],
-            ['label' => 'Kontak', 'route' => 'contact'],
-        ];
-        $footerLinks = array_merge(
-            [['label' => 'Beranda', 'route' => 'home']],
-            $academicLinks,
-            $simpleLinks,
-            [['label' => 'PMB', 'route' => 'pmb']],
-        );
+        // Navigasi dari database (dikelola admin via Menu Navigasi).
+        $menuLinks = $menuLinks ?? collect();
+        $menuButtons = $menuButtons ?? collect();
+
+        $currentPath = '/'.trim(request()->path(), '/');
+        $isActive = function (?string $url) use ($currentPath): bool {
+            if (blank($url) || ! str_starts_with($url, '/')) {
+                return false;
+            }
+            $url = '/'.trim($url, '/');
+            return $url === '/'
+                ? $currentPath === '/'
+                : ($currentPath === $url || str_starts_with($currentPath, $url.'/'));
+        };
+        $isParentActive = fn ($item): bool => $item->children->contains(fn ($c) => $isActive($c->url)) || $isActive($item->url);
+
+        // Tautan footer: ratakan item daun (anak dropdown, atau item ber-URL).
+        $footerLinks = collect();
+        foreach ($menuLinks as $item) {
+            if ($item->children->isNotEmpty()) {
+                foreach ($item->children as $c) {
+                    $footerLinks->push($c);
+                }
+            } elseif (filled($item->url)) {
+                $footerLinks->push($item);
+            }
+        }
+        foreach ($menuButtons as $b) {
+            if (filled($b->url)) {
+                $footerLinks->push($b);
+            }
+        }
+
         $socials = array_filter([
             'Facebook' => $general->social_facebook,
             'Instagram' => $general->social_instagram,
             'YouTube' => $general->social_youtube,
             'X' => $general->social_x,
         ]);
-        $profileActive = collect($profileLinks)->contains(fn ($l) => request()->routeIs($l['route']));
-        $academicActive = collect($academicLinks)->contains(fn ($l) => request()->routeIs($l['route']));
     @endphp
 
     @if ($general->announcement_enabled && filled($general->announcement_text))
@@ -113,43 +121,31 @@
 
             {{-- Desktop nav --}}
             <div class="hidden items-center gap-0.5 lg:flex">
-                <a href="{{ route('home') }}" @class(['rounded-lg px-3 py-2 text-sm font-medium transition', 'text-brand-700 bg-brand-50' => request()->routeIs('home'), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs('home')])>Beranda</a>
-
-                {{-- Profil dropdown --}}
-                <div class="relative" x-data="{ o: false }" @mouseenter="o = true" @mouseleave="o = false">
-                    <button @class(['flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition', 'text-brand-700 bg-brand-50' => $profileActive, 'text-slate-600 hover:bg-slate-100' => ! $profileActive])>
-                        Profil <x-heroicon-o-chevron-down class="h-4 w-4" />
-                    </button>
-                    <div x-show="o" x-cloak x-transition class="absolute left-0 top-full w-56 pt-2">
-                        <div class="overflow-hidden rounded-xl bg-white py-1 shadow-lg ring-1 ring-slate-100">
-                            @foreach ($profileLinks as $l)
-                                <a href="{{ route($l['route']) }}" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-brand-50 hover:text-brand-700">{{ $l['label'] }}</a>
-                            @endforeach
+                @foreach ($menuLinks as $item)
+                    @if ($item->children->isNotEmpty())
+                        {{-- dropdown --}}
+                        <div class="relative" x-data="{ o: false }" @mouseenter="o = true" @mouseleave="o = false">
+                            <button @class(['flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition', 'text-brand-700 bg-brand-50' => $isParentActive($item), 'text-slate-600 hover:bg-slate-100' => ! $isParentActive($item)])>
+                                {{ $item->label }} <x-heroicon-o-chevron-down class="h-4 w-4" />
+                            </button>
+                            <div x-show="o" x-cloak x-transition class="absolute left-0 top-full w-56 pt-2">
+                                <div class="overflow-hidden rounded-xl bg-white py-1 shadow-lg ring-1 ring-slate-100">
+                                    @foreach ($item->children as $child)
+                                        <a href="{{ $child->url ?: '#' }}" @if ($child->open_in_new_tab) target="_blank" rel="noopener" @endif @class(['block px-4 py-2.5 text-sm hover:bg-brand-50 hover:text-brand-700', 'text-brand-700 bg-brand-50' => $isActive($child->url), 'text-slate-600' => ! $isActive($child->url)])>{{ $child->label }}</a>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                {{-- Akademik dropdown --}}
-                <div class="relative" x-data="{ o: false }" @mouseenter="o = true" @mouseleave="o = false">
-                    <button @class(['flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition', 'text-brand-700 bg-brand-50' => $academicActive, 'text-slate-600 hover:bg-slate-100' => ! $academicActive])>
-                        Akademik <x-heroicon-o-chevron-down class="h-4 w-4" />
-                    </button>
-                    <div x-show="o" x-cloak x-transition class="absolute left-0 top-full w-56 pt-2">
-                        <div class="overflow-hidden rounded-xl bg-white py-1 shadow-lg ring-1 ring-slate-100">
-                            @foreach ($academicLinks as $l)
-                                <a href="{{ route($l['route']) }}" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-brand-50 hover:text-brand-700">{{ $l['label'] }}</a>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                @foreach ($simpleLinks as $l)
-                    <a href="{{ route($l['route']) }}" @class(['rounded-lg px-3 py-2 text-sm font-medium transition', 'text-brand-700 bg-brand-50' => request()->routeIs($l['route']), 'text-slate-600 hover:bg-slate-100' => ! request()->routeIs($l['route'])])>{{ $l['label'] }}</a>
+                    @else
+                        <a href="{{ $item->url ?: '#' }}" @if ($item->open_in_new_tab) target="_blank" rel="noopener" @endif @class(['rounded-lg px-3 py-2 text-sm font-medium transition', 'text-brand-700 bg-brand-50' => $isActive($item->url), 'text-slate-600 hover:bg-slate-100' => ! $isActive($item->url)])>{{ $item->label }}</a>
+                    @endif
                 @endforeach
 
-                <a href="{{ route('pmb') }}" class="ml-2 inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
-                    Daftar PMB <x-heroicon-o-arrow-right class="h-4 w-4" />
-                </a>
+                @foreach ($menuButtons as $btn)
+                    <a href="{{ $btn->url ?: '#' }}" @if ($btn->open_in_new_tab) target="_blank" rel="noopener" @endif class="ml-2 inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
+                        {{ $btn->label }} <x-heroicon-o-arrow-right class="h-4 w-4" />
+                    </a>
+                @endforeach
             </div>
 
             {{-- Mobile toggle --}}
@@ -162,20 +158,19 @@
         {{-- Mobile menu --}}
         <div x-show="open" x-cloak x-transition class="max-h-[80vh] overflow-y-auto border-t border-slate-100 bg-white lg:hidden">
             <div class="container-page space-y-1 py-3">
-                <a href="{{ route('home') }}" class="block rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100">Beranda</a>
-                <p class="px-4 pt-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Profil</p>
-                @foreach ($profileLinks as $l)
-                    <a href="{{ route($l['route']) }}" class="block rounded-lg px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-100">{{ $l['label'] }}</a>
+                @foreach ($menuLinks as $item)
+                    @if ($item->children->isNotEmpty())
+                        <p class="px-4 pt-3 text-xs font-semibold uppercase tracking-wider text-slate-400">{{ $item->label }}</p>
+                        @foreach ($item->children as $child)
+                            <a href="{{ $child->url ?: '#' }}" @if ($child->open_in_new_tab) target="_blank" rel="noopener" @endif class="block rounded-lg px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-100">{{ $child->label }}</a>
+                        @endforeach
+                    @else
+                        <a href="{{ $item->url ?: '#' }}" @if ($item->open_in_new_tab) target="_blank" rel="noopener" @endif class="block rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100">{{ $item->label }}</a>
+                    @endif
                 @endforeach
-                <p class="px-4 pt-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Akademik</p>
-                @foreach ($academicLinks as $l)
-                    <a href="{{ route($l['route']) }}" class="block rounded-lg px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-100">{{ $l['label'] }}</a>
+                @foreach ($menuButtons as $btn)
+                    <a href="{{ $btn->url ?: '#' }}" @if ($btn->open_in_new_tab) target="_blank" rel="noopener" @endif class="mt-2 block rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white">{{ $btn->label }}</a>
                 @endforeach
-                <div class="my-2 border-t border-slate-100"></div>
-                @foreach ($simpleLinks as $l)
-                    <a href="{{ route($l['route']) }}" class="block rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100">{{ $l['label'] }}</a>
-                @endforeach
-                <a href="{{ route('pmb') }}" class="mt-2 block rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white">Daftar PMB</a>
             </div>
         </div>
     </header>
@@ -213,7 +208,7 @@
                 <h3 class="text-sm font-semibold uppercase tracking-wider text-white">Tautan</h3>
                 <ul class="mt-4 space-y-2.5 text-sm">
                     @foreach ($footerLinks as $link)
-                        <li><a href="{{ route($link['route']) }}" class="text-slate-400 transition hover:text-white">{{ $link['label'] }}</a></li>
+                        <li><a href="{{ $link->url ?: '#' }}" @if ($link->open_in_new_tab) target="_blank" rel="noopener" @endif class="text-slate-400 transition hover:text-white">{{ $link->label }}</a></li>
                     @endforeach
                 </ul>
             </div>
