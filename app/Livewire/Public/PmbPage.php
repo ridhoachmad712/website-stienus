@@ -9,6 +9,7 @@ use App\Models\Program;
 use App\Settings\AdmissionSettings;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -39,6 +40,9 @@ class PmbPage extends Component
     #[Validate('nullable|string|max:2000')]
     public string $message = '';
 
+    /** Honeypot anti-spam (harus tetap kosong). */
+    public string $website = '';
+
     public bool $submitted = false;
 
     public function getAdmissionProperty(): AdmissionSettings
@@ -56,6 +60,22 @@ class PmbPage extends Component
 
     public function submit(): void
     {
+        // Honeypot: bot mengisi field tersembunyi → diam-diam diabaikan.
+        if (filled($this->website)) {
+            $this->submitted = true;
+
+            return;
+        }
+
+        // Rate limit: maks 5 pengiriman per menit per IP.
+        $key = 'pmb-submit:'.request()->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $this->addError('form', 'Terlalu banyak percobaan. Silakan coba lagi dalam '.RateLimiter::availableIn($key).' detik.');
+
+            return;
+        }
+        RateLimiter::hit($key, 60);
+
         $validated = $this->validate();
 
         Applicant::create($validated);

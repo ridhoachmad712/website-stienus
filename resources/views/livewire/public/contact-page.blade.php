@@ -59,6 +59,16 @@
                 </div>
             @else
                 <form wire:submit="submit" class="mt-6 space-y-4">
+                    {{-- Honeypot anti-spam (disembunyikan dari pengguna) --}}
+                    <div class="hidden" aria-hidden="true">
+                        <label>Website</label>
+                        <input type="text" wire:model="website" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    @error('form')
+                        <p class="rounded-xl bg-red-50 p-3 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+
                     <div>
                         <label class="mb-1 block text-sm font-medium text-slate-700">Nama</label>
                         <input type="text" wire:model="name" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
