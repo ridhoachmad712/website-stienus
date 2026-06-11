@@ -32,10 +32,10 @@
 
                             @switch($field['type'])
                                 @case('textarea')
-                                    <textarea id="{{ $id }}" wire:model="{{ $key }}" rows="4" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500"></textarea>
+                                    <textarea id="{{ $id }}" wire:model="{{ $key }}" rows="4" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500"></textarea>
                                     @break
                                 @case('select')
-                                    <select id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <select id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                                         <option value="">— Pilih —</option>
                                         @foreach ($field['options'] as $opt)<option value="{{ $opt }}">{{ $opt }}</option>@endforeach
                                     </select>
@@ -55,19 +55,19 @@
                                     </div>
                                     @break
                                 @case('email')
-                                    <input type="email" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <input type="email" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                                     @break
                                 @case('number')
-                                    <input type="number" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <input type="number" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                                     @break
                                 @case('phone')
-                                    <input type="tel" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <input type="tel" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                                     @break
                                 @case('date')
-                                    <input type="date" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <input type="date" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                                     @break
                                 @default
-                                    <input type="text" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <input type="text" id="{{ $id }}" wire:model="{{ $key }}" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                             @endswitch
 
                             @error($key)<span class="mt-1 text-xs text-red-600">{{ $message }}</span>@enderror

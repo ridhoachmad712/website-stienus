@@ -71,22 +71,22 @@
 
                     <div>
                         <label class="mb-1 block text-sm font-medium text-slate-700">Nama</label>
-                        <input type="text" wire:model="name" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                        <input type="text" wire:model="name" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                         @error('name') <span class="mt-1 text-xs text-red-600">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="mb-1 block text-sm font-medium text-slate-700">Email</label>
-                        <input type="email" wire:model="email" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                        <input type="email" wire:model="email" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                         @error('email') <span class="mt-1 text-xs text-red-600">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="mb-1 block text-sm font-medium text-slate-700">Subjek</label>
-                        <input type="text" wire:model="subject" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                        <input type="text" wire:model="subject" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                         @error('subject') <span class="mt-1 text-xs text-red-600">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="mb-1 block text-sm font-medium text-slate-700">Pesan</label>
-                        <textarea wire:model="message" rows="5" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500"></textarea>
+                        <textarea wire:model="message" rows="5" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500"></textarea>
                         @error('message') <span class="mt-1 text-xs text-red-600">{{ $message }}</span> @enderror
                     </div>
                     <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:opacity-60" wire:loading.attr="disabled" wire:target="submit">

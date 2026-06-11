@@ -30,7 +30,5 @@
         </section>
     @endif
 
-    <div class="container-page max-w-3xl space-y-8 py-12">
-        @include('partials.content-blocks', ['blocks' => $page->blocks, 'fallback' => $page->content])
-    </div>
+    @include('partials.page-blocks', ['blocks' => $page->blocks, 'fallback' => $page->content])
 </div>

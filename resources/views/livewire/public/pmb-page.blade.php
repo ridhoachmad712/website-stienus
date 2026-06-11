@@ -81,22 +81,22 @@
                             <div class="grid gap-4 sm:grid-cols-2">
                                 <div>
                                     <label class="mb-1 block text-sm font-medium text-slate-700">Nama Lengkap</label>
-                                    <input type="text" wire:model="name" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <input type="text" wire:model="name" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                                     @error('name') <span class="mt-1 text-xs text-red-600">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
                                     <label class="mb-1 block text-sm font-medium text-slate-700">Email</label>
-                                    <input type="email" wire:model="email" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <input type="email" wire:model="email" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                                     @error('email') <span class="mt-1 text-xs text-red-600">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
                                     <label class="mb-1 block text-sm font-medium text-slate-700">No. WhatsApp</label>
-                                    <input type="text" wire:model="phone" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <input type="text" wire:model="phone" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                                     @error('phone') <span class="mt-1 text-xs text-red-600">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
                                     <label class="mb-1 block text-sm font-medium text-slate-700">Program Studi</label>
-                                    <select wire:model="program" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                    <select wire:model="program" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                                         <option value="">— Pilih —</option>
                                         @foreach ($this->programs as $program)
                                             <option value="{{ $program->name }}">{{ $program->degree }} {{ $program->name }}</option>
@@ -107,15 +107,15 @@
                             </div>
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-slate-700">Asal Sekolah</label>
-                                <input type="text" wire:model="origin_school" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
+                                <input type="text" wire:model="origin_school" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500">
                             </div>
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-slate-700">Alamat</label>
-                                <textarea wire:model="address" rows="2" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500"></textarea>
+                                <textarea wire:model="address" rows="2" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500"></textarea>
                             </div>
                             <div>
                                 <label class="mb-1 block text-sm font-medium text-slate-700">Pesan (opsional)</label>
-                                <textarea wire:model="message" rows="3" class="w-full rounded-xl border-0 bg-slate-50 text-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500"></textarea>
+                                <textarea wire:model="message" rows="3" class="w-full rounded-xl border-0 bg-slate-50 px-4 py-3 text-sm text-slate-700 ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-brand-500"></textarea>
                             </div>
                             <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:opacity-60" wire:loading.attr="disabled">
                                 <span wire:loading.remove wire:target="submit">Kirim Pendaftaran</span>

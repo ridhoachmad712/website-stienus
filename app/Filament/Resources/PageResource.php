@@ -72,7 +72,7 @@ class PageResource extends Resource
                     ->schema([
                         Forms\Components\Builder::make('blocks')
                             ->label('Blok Konten')
-                            ->blocks(\App\Support\ContentBlocks::make())
+                            ->blocks(\App\Support\PageBlocks::make())
                             ->blockNumbers(false)
                             ->collapsible()
                             ->cloneable()
