@@ -51,10 +51,6 @@ class MenuItemResource extends Resource
                     ->maxLength(255)
                     ->placeholder('/berita atau https://...')
                     ->helperText('Boleh dikosongkan untuk induk dropdown yang hanya membuka submenu.'),
-                Forms\Components\TextInput::make('order')
-                    ->label('Urutan')
-                    ->numeric()
-                    ->default(0),
                 Forms\Components\Toggle::make('is_active')->label('Aktif')->default(true),
                 Forms\Components\Toggle::make('is_button')
                     ->label('Tampilkan sebagai tombol (CTA)')
@@ -77,10 +73,17 @@ class MenuItemResource extends Resource
                 Tables\Columns\TextColumn::make('url')->label('Tautan')->placeholder('—')->toggleable(),
                 Tables\Columns\IconColumn::make('is_button')->label('Tombol')->boolean(),
                 Tables\Columns\IconColumn::make('is_active')->label('Aktif')->boolean(),
-                Tables\Columns\TextColumn::make('order')->label('Urutan')->sortable(),
             ])
             ->defaultSort('order')
             ->reorderable('order')
+            ->paginated(false)
+            ->reorderRecordsTriggerAction(
+                fn (Tables\Actions\Action $action, bool $isReordering) => $action
+                    ->label($isReordering ? 'Selesai Mengatur' : 'Ubah Urutan')
+                    ->icon($isReordering ? 'heroicon-o-check' : 'heroicon-o-arrows-up-down')
+                    ->button()
+                    ->color($isReordering ? 'success' : 'gray'),
+            )
             ->filters([
                 Tables\Filters\TernaryFilter::make('parent_id')
                     ->label('Jenis')

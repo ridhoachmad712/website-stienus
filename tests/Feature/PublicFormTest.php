@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Livewire\Public\ContactPage;
+use App\Livewire\Public\FormPage;
 use App\Livewire\Public\PmbPage;
+use App\Models\CustomForm;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -55,5 +57,27 @@ class PublicFormTest extends TestCase
             ->assertSet('submitted', true);
 
         $this->assertDatabaseHas('applicants', ['email' => 'siti@example.com']);
+    }
+
+    public function test_custom_form_saves_submission(): void
+    {
+        $form = CustomForm::create([
+            'title' => 'Tes Form',
+            'slug' => 'tes-form',
+            'is_active' => true,
+            'fields' => [
+                ['type' => 'text', 'data' => ['label' => 'Nama', 'required' => true]],
+                ['type' => 'email', 'data' => ['label' => 'Email', 'required' => true]],
+            ],
+        ]);
+
+        Livewire::test(FormPage::class, ['slug' => 'tes-form'])
+            ->set('data.field_0', 'Andi')
+            ->set('data.field_1', 'andi@example.com')
+            ->call('submit')
+            ->assertSet('submitted', true);
+
+        $this->assertDatabaseHas('form_submissions', ['custom_form_id' => $form->id]);
+        $this->assertSame('Andi', $form->submissions()->first()->data['Nama']);
     }
 }

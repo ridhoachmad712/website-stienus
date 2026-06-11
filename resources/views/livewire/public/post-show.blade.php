@@ -22,9 +22,9 @@
             <img src="{{ Storage::disk('public')->url($post->featured_image) }}" alt="{{ $post->title }}" class="mb-8 w-full rounded-3xl shadow-md">
         @endif
 
-        <article class="prose prose-slate max-w-none prose-headings:font-bold prose-a:text-brand-600 prose-img:rounded-2xl">
-            {!! $post->content !!}
-        </article>
+        <div class="space-y-8">
+            @include('partials.content-blocks', ['blocks' => $post->blocks, 'fallback' => $post->content])
+        </div>
 
         {{-- Share --}}
         @php

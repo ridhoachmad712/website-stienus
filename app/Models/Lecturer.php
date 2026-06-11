@@ -21,14 +21,28 @@ class Lecturer extends Model
      */
     protected $fillable = [
         'program_id',
+        'order',
         'nidn',
         'name',
         'title',
         'photo',
         'expertise',
+        'bio',
+        'education',
+        'courses',
         'google_scholar_link',
         'sinta_link',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'order' => 'integer',
+        ];
+    }
 
     /**
      * Get the study program that owns the lecturer.

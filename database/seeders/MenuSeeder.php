@@ -16,34 +16,47 @@ class MenuSeeder extends Seeder
             return;
         }
 
-        $order = 1;
+        // Counter global agar nilai "order" unik & runtut (induk lalu anak-anaknya),
+        // sehingga tabel admin tampil rapi dan mudah digeser.
+        $order = 0;
+        $create = fn (array $attributes) => MenuItem::create([...$attributes, 'order' => ++$order]);
 
-        MenuItem::create(['label' => 'Beranda', 'url' => '/', 'order' => $order++]);
+        $create(['label' => 'Beranda', 'url' => '/']);
 
-        $profil = MenuItem::create(['label' => 'Profil', 'url' => null, 'order' => $order++]);
+        $profil = $create(['label' => 'Profil', 'url' => null]);
         foreach ([
             ['Tentang Kami', '/profil'],
             ['Sejarah', '/profil/sejarah'],
             ['Sambutan Pimpinan', '/profil/sambutan'],
             ['Struktur Organisasi', '/profil/struktur'],
-        ] as $i => [$label, $url]) {
-            MenuItem::create(['parent_id' => $profil->id, 'label' => $label, 'url' => $url, 'order' => $i + 1]);
+        ] as [$label, $url]) {
+            $create(['parent_id' => $profil->id, 'label' => $label, 'url' => $url]);
         }
 
-        $akademik = MenuItem::create(['label' => 'Akademik', 'url' => null, 'order' => $order++]);
+        $akademik = $create(['label' => 'Akademik', 'url' => null]);
         foreach ([
             ['Program Studi', '/program-studi'],
             ['Direktori Dosen', '/dosen'],
-        ] as $i => [$label, $url]) {
-            MenuItem::create(['parent_id' => $akademik->id, 'label' => $label, 'url' => $url, 'order' => $i + 1]);
+            ['Tenaga Kependidikan', '/tendik'],
+        ] as [$label, $url]) {
+            $create(['parent_id' => $akademik->id, 'label' => $label, 'url' => $url]);
         }
 
-        MenuItem::create(['label' => 'Berita', 'url' => '/berita', 'order' => $order++]);
-        MenuItem::create(['label' => 'Agenda', 'url' => '/agenda', 'order' => $order++]);
-        MenuItem::create(['label' => 'Galeri', 'url' => '/galeri', 'order' => $order++]);
-        MenuItem::create(['label' => 'Unduhan', 'url' => '/unduhan', 'order' => $order++]);
-        MenuItem::create(['label' => 'Kontak', 'url' => '/kontak', 'order' => $order++]);
+        $informasi = $create(['label' => 'Informasi', 'url' => null]);
+        foreach ([
+            ['Berita', '/berita'],
+            ['Pengumuman', '/pengumuman'],
+            ['Agenda', '/agenda'],
+            ['Prestasi', '/prestasi'],
+            ['Galeri', '/galeri'],
+            ['Unduhan', '/unduhan'],
+            ['FAQ', '/faq'],
+        ] as [$label, $url]) {
+            $create(['parent_id' => $informasi->id, 'label' => $label, 'url' => $url]);
+        }
 
-        MenuItem::create(['label' => 'Daftar PMB', 'url' => '/pmb', 'order' => $order++, 'is_button' => true]);
+        $create(['label' => 'Kontak', 'url' => '/kontak']);
+
+        $create(['label' => 'Daftar PMB', 'url' => '/pmb', 'is_button' => true]);
     }
 }

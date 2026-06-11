@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Achievement;
 use App\Models\Agenda;
+use App\Models\Announcement;
 use App\Models\Applicant;
+use App\Models\Faq;
+use App\Models\Stat;
 use App\Models\Category;
 use App\Models\ContactMessage;
 use App\Models\Download;
 use App\Models\Gallery;
 use App\Models\Lecturer;
+use App\Models\Page;
 use App\Models\Partner;
 use App\Models\Post;
 use App\Models\Program;
 use App\Models\Slider;
+use App\Models\Staff;
 use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -55,6 +61,53 @@ class DatabaseSeeder extends Seeder
         Testimonial::factory()->count(6)->create();
         Partner::factory()->count(8)->create();
         Download::factory()->count(6)->create();
+        Staff::factory()->count(8)->create();
+
+        if (Stat::count() === 0) {
+            foreach ([
+                ['value' => '1.500+', 'label' => 'Mahasiswa Aktif', 'icon' => 'users'],
+                ['value' => '3.000+', 'label' => 'Alumni', 'icon' => 'academic-cap'],
+                ['value' => '25+', 'label' => 'Dosen', 'icon' => 'user-group'],
+                ['value' => 'Baik Sekali', 'label' => 'Akreditasi', 'icon' => 'check-badge'],
+            ] as $i => $s) {
+                Stat::create([...$s, 'order' => $i + 1]);
+            }
+        }
+
+        if (Faq::count() === 0) {
+            foreach ([
+                ['Bagaimana cara mendaftar?', 'Pendaftaran dilakukan online melalui halaman PMB di situs ini.', 'Pendaftaran'],
+                ['Apa saja program studi yang tersedia?', 'Tersedia S1 Akuntansi dan S1 Manajemen.', 'Akademik'],
+                ['Berapa biaya kuliahnya?', 'Informasi biaya dapat dilihat di halaman PMB atau hubungi panitia.', 'Biaya'],
+            ] as $i => [$q, $a, $cat]) {
+                Faq::create(['question' => $q, 'answer' => $a, 'category' => $cat, 'order' => $i + 1]);
+            }
+        }
+
+        if (Announcement::count() === 0) {
+            Announcement::create([
+                'title' => 'Jadwal Pendaftaran Mahasiswa Baru 2026/2027',
+                'content' => '<p>Pendaftaran mahasiswa baru gelombang I dibuka mulai Januari 2026. Segera daftarkan diri Anda.</p>',
+                'published_at' => now(),
+                'is_pinned' => true,
+            ]);
+        }
+
+        if (Achievement::count() === 0) {
+            Achievement::create([
+                'title' => 'Program Studi Akuntansi Raih Akreditasi Baik Sekali',
+                'description' => 'Program Studi S1 Akuntansi meraih peringkat akreditasi Baik Sekali dari LAMEMBA.',
+                'category' => 'Institusi',
+                'date' => now()->subMonths(2),
+            ]);
+        }
+
+        Page::firstOrCreate(['slug' => 'fasilitas'], [
+            'title' => 'Fasilitas Kampus',
+            'content' => '<p>STIE Nusantara Makassar didukung ruang kuliah ber-AC, laboratorium komputer, perpustakaan, dan area diskusi mahasiswa.</p>',
+            'meta_description' => 'Fasilitas penunjang di STIE Nusantara Makassar.',
+            'is_published' => true,
+        ]);
     }
 
     /**

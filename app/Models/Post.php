@@ -24,6 +24,8 @@ class Post extends Model
         'title',
         'slug',
         'content',
+        'excerpt',
+        'blocks',
         'featured_image',
         'status',
         'views_count',
@@ -38,7 +40,17 @@ class Post extends Model
     {
         return [
             'views_count' => 'integer',
+            'blocks' => 'array',
         ];
+    }
+
+    /**
+     * Ringkasan untuk daftar & meta SEO (pakai excerpt, jatuh ke konten lama).
+     */
+    public function getSummaryAttribute(): string
+    {
+        return $this->excerpt
+            ?: \Illuminate\Support\Str::limit(trim(strip_tags((string) $this->content)), 160);
     }
 
     /**

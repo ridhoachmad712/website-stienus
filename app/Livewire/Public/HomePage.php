@@ -61,15 +61,29 @@ class HomePage extends Component
     }
 
     /**
-     * @return array<string, int>
+     * Statistik untuk hero: pakai data Statistik buatan admin bila ada,
+     * jika tidak pakai hitungan otomatis.
+     *
+     * @return array<int, array{icon: string, value: string, label: string, numeric: bool}>
      */
-    public function getStatsProperty(): array
+    public function getHeroStatsProperty(): array
     {
+        $custom = \App\Models\Stat::query()->where('is_active', true)->orderBy('order')->get();
+
+        if ($custom->isNotEmpty()) {
+            return $custom->map(fn (\App\Models\Stat $s): array => [
+                'icon' => $s->icon ?: 'chart-bar',
+                'value' => $s->value,
+                'label' => $s->label,
+                'numeric' => is_numeric($s->value),
+            ])->all();
+        }
+
         return [
-            'programs' => Program::count(),
-            'lecturers' => Lecturer::count(),
-            'posts' => Post::where('status', 'published')->count(),
-            'agendas' => Agenda::count(),
+            ['icon' => 'academic-cap', 'value' => (string) Program::count(), 'label' => 'Program Studi', 'numeric' => true],
+            ['icon' => 'users', 'value' => (string) Lecturer::count(), 'label' => 'Dosen Ahli', 'numeric' => true],
+            ['icon' => 'calendar-days', 'value' => (string) Agenda::count(), 'label' => 'Agenda', 'numeric' => true],
+            ['icon' => 'newspaper', 'value' => (string) Post::where('status', 'published')->count(), 'label' => 'Publikasi', 'numeric' => true],
         ];
     }
 

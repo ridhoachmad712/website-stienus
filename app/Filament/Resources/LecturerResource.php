@@ -68,6 +68,25 @@ class LecturerResource extends Resource
                     ])
                     ->columns(2),
 
+                Forms\Components\Section::make('Profil Lengkap')
+                    ->description('Ditampilkan di halaman detail dosen.')
+                    ->schema([
+                        Forms\Components\Textarea::make('bio')
+                            ->label('Biografi Singkat')
+                            ->rows(4)
+                            ->columnSpanFull(),
+                        Forms\Components\Textarea::make('education')
+                            ->label('Riwayat Pendidikan')
+                            ->rows(3)
+                            ->helperText('Satu jenjang per baris, mis. "S1 Manajemen - Universitas X (2015)".'),
+                        Forms\Components\Textarea::make('courses')
+                            ->label('Mata Kuliah Diampu')
+                            ->rows(3)
+                            ->helperText('Pisahkan dengan baris baru atau koma.'),
+                    ])
+                    ->columns(2)
+                    ->collapsible(),
+
                 Forms\Components\Section::make('Tautan Akademik')
                     ->schema([
                         Forms\Components\TextInput::make('google_scholar_link')
@@ -129,7 +148,16 @@ class LecturerResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('name');
+            ->defaultSort('order')
+            ->reorderable('order')
+            ->paginated([25, 50, 100, 'all'])
+            ->reorderRecordsTriggerAction(
+                fn (Tables\Actions\Action $action, bool $isReordering) => $action
+                    ->label($isReordering ? 'Selesai Mengatur' : 'Ubah Urutan')
+                    ->icon($isReordering ? 'heroicon-o-check' : 'heroicon-o-arrows-up-down')
+                    ->button()
+                    ->color($isReordering ? 'success' : 'gray'),
+            );
     }
 
     public static function getRelations(): array

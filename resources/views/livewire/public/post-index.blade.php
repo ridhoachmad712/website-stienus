@@ -48,7 +48,7 @@
                             <h2 class="font-bold leading-snug text-slate-900 transition group-hover:text-brand-700">
                                 <a href="{{ route('posts.show', $post->slug) }}">{{ $post->title }}</a>
                             </h2>
-                            <p class="mt-2 line-clamp-2 flex-1 text-sm text-slate-500">{{ Str::limit(strip_tags($post->content), 120) }}</p>
+                            <p class="mt-2 line-clamp-2 flex-1 text-sm text-slate-500">{{ $post->summary }}</p>
                             <div class="mt-4 flex items-center gap-4 border-t border-slate-100 pt-3 text-xs text-slate-400">
                                 <span class="flex items-center gap-1.5"><x-heroicon-o-calendar class="h-4 w-4" />{{ $post->created_at->translatedFormat('d M Y') }}</span>
                                 <span class="flex items-center gap-1.5"><x-heroicon-o-eye class="h-4 w-4" />{{ number_format($post->views_count) }}</span>

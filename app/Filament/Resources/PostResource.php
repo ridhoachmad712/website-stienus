@@ -43,14 +43,27 @@ class PostResource extends Resource
                             ->maxLength(255)
                             ->unique(ignoreRecord: true)
                             ->helperText('Otomatis dibuat dari judul, dapat disesuaikan.'),
-                        Forms\Components\RichEditor::make('content')
-                            ->label('Isi Berita')
-                            ->required()
+                        Forms\Components\Textarea::make('excerpt')
+                            ->label('Ringkasan')
+                            ->rows(2)
+                            ->maxLength(300)
                             ->columnSpanFull()
-                            ->fileAttachmentsDisk('public')
-                            ->fileAttachmentsDirectory('posts/attachments'),
+                            ->helperText('Tampil di daftar berita & pratinjau berbagi (SEO). Kosongkan untuk diambil otomatis dari isi.'),
                     ])
                     ->columns(2),
+
+                Forms\Components\Section::make('Susunan Isi')
+                    ->description('Bangun isi berita dari blok: teks, gambar, gambar+teks, video, kutipan, tombol.')
+                    ->schema([
+                        Forms\Components\Builder::make('blocks')
+                            ->label('Blok Konten')
+                            ->blocks(\App\Support\ContentBlocks::make())
+                            ->blockNumbers(false)
+                            ->collapsible()
+                            ->cloneable()
+                            ->addActionLabel('Tambah blok')
+                            ->columnSpanFull(),
+                    ]),
 
                 Forms\Components\Section::make('Pengaturan')
                     ->schema([

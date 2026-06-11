@@ -1,20 +1,28 @@
 <?php
 
+use App\Livewire\Public\AchievementIndex;
 use App\Livewire\Public\AgendaIndex;
 use App\Livewire\Public\AgendaShow;
+use App\Livewire\Public\AnnouncementIndex;
 use App\Livewire\Public\ContactPage;
+use App\Livewire\Public\FaqPage;
+use App\Livewire\Public\FormPage;
 use App\Livewire\Public\DownloadIndex;
 use App\Livewire\Public\GalleryIndex;
 use App\Livewire\Public\HomePage;
 use App\Livewire\Public\LecturerIndex;
+use App\Livewire\Public\LecturerShow;
+use App\Livewire\Public\PageShow;
 use App\Livewire\Public\PmbPage;
 use App\Livewire\Public\PostIndex;
 use App\Livewire\Public\PostShow;
 use App\Livewire\Public\ProfilePage;
 use App\Livewire\Public\ProgramIndex;
 use App\Livewire\Public\ProgramShow;
+use App\Livewire\Public\StaffIndex;
 use App\Models\Agenda;
 use App\Models\Download;
+use App\Models\Page;
 use App\Models\Post;
 use App\Models\Program;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +51,8 @@ Route::get('/profil/struktur', ProfilePage::class)->defaults('section', 'structu
 Route::get('/program-studi', ProgramIndex::class)->name('programs.index');
 Route::get('/program-studi/{slug}', ProgramShow::class)->name('programs.show');
 Route::get('/dosen', LecturerIndex::class)->name('lecturers.index');
+Route::get('/dosen/{lecturer}', LecturerShow::class)->name('lecturers.show');
+Route::get('/tendik', StaffIndex::class)->name('staff.index');
 
 // Berita
 Route::get('/berita', PostIndex::class)->name('posts.index');
@@ -54,6 +64,11 @@ Route::get('/agenda/{agenda}', AgendaShow::class)->name('agenda.show');
 
 // Galeri
 Route::get('/galeri', GalleryIndex::class)->name('gallery.index');
+
+// Prestasi, Pengumuman, FAQ
+Route::get('/prestasi', AchievementIndex::class)->name('achievements.index');
+Route::get('/pengumuman', AnnouncementIndex::class)->name('announcements.index');
+Route::get('/faq', FaqPage::class)->name('faq');
 
 // Pusat Unduhan
 Route::get('/unduhan', DownloadIndex::class)->name('downloads.index');
@@ -69,12 +84,18 @@ Route::get('/pmb', PmbPage::class)->name('pmb');
 // Kontak
 Route::get('/kontak', ContactPage::class)->name('contact');
 
+// Halaman custom buatan admin
+Route::get('/halaman/{slug}', PageShow::class)->name('pages.show');
+
+// Formulir custom buatan admin
+Route::get('/formulir/{slug}', FormPage::class)->name('forms.show');
+
 // Sitemap untuk SEO
 Route::get('/sitemap.xml', function () {
     $urls = collect();
 
     $urls->push(['loc' => route('home'), 'priority' => '1.0']);
-    foreach (['profile', 'profile.history', 'profile.leader', 'profile.structure', 'programs.index', 'lecturers.index', 'posts.index', 'agenda.index', 'gallery.index', 'downloads.index', 'pmb', 'contact'] as $name) {
+    foreach (['profile', 'profile.history', 'profile.leader', 'profile.structure', 'programs.index', 'lecturers.index', 'staff.index', 'posts.index', 'agenda.index', 'gallery.index', 'achievements.index', 'announcements.index', 'faq', 'downloads.index', 'pmb', 'contact'] as $name) {
         $urls->push(['loc' => route($name), 'priority' => '0.7']);
     }
 
@@ -86,6 +107,12 @@ Route::get('/sitemap.xml', function () {
 
     Agenda::query()->get(['id', 'updated_at'])
         ->each(fn (Agenda $a) => $urls->push(['loc' => route('agenda.show', $a), 'lastmod' => $a->updated_at?->toAtomString(), 'priority' => '0.5']));
+
+    \App\Models\Lecturer::query()->get(['id', 'updated_at'])
+        ->each(fn ($l) => $urls->push(['loc' => route('lecturers.show', $l), 'lastmod' => $l->updated_at?->toAtomString(), 'priority' => '0.5']));
+
+    Page::query()->where('is_published', true)->get(['slug', 'updated_at'])
+        ->each(fn (Page $p) => $urls->push(['loc' => route('pages.show', $p->slug), 'lastmod' => $p->updated_at?->toAtomString(), 'priority' => '0.5']));
 
     return response()
         ->view('sitemap', ['urls' => $urls])

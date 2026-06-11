@@ -35,6 +35,6 @@ class Program extends Model
      */
     public function lecturers(): HasMany
     {
-        return $this->hasMany(Lecturer::class);
+        return $this->hasMany(Lecturer::class)->orderBy('order')->orderBy('name');
     }
 }

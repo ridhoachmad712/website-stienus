@@ -8,7 +8,6 @@ use App\Models\Post;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Livewire\Component;
 
 class PostShow extends Component
@@ -48,7 +47,7 @@ class PostShow extends Component
         return view('livewire.public.post-show')
             ->title($this->post->title)
             ->layout('components.layouts.app', [
-                'metaDescription' => Str::limit(strip_tags($this->post->content), 160),
+                'metaDescription' => $this->post->summary,
                 'ogImageUrl' => $this->post->featured_image
                     ? Storage::disk('public')->url($this->post->featured_image)
                     : null,

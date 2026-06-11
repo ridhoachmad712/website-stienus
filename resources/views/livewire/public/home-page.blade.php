@@ -4,12 +4,7 @@
         $heroTitle = $hero->hero_highlight
             ? str_replace($hero->hero_highlight, '<span class="bg-gradient-to-r from-amber-300 to-amber-100 bg-clip-text text-transparent">' . e($hero->hero_highlight) . '</span>', e($hero->hero_title))
             : e($hero->hero_title);
-        $heroStats = [
-            ['icon' => 'academic-cap', 'value' => $this->stats['programs'], 'label' => 'Program Studi'],
-            ['icon' => 'users', 'value' => $this->stats['lecturers'], 'label' => 'Dosen Ahli'],
-            ['icon' => 'calendar-days', 'value' => $this->stats['agendas'], 'label' => 'Agenda'],
-            ['icon' => 'newspaper', 'value' => $this->stats['posts'], 'label' => 'Publikasi'],
-        ];
+        $heroStats = $this->heroStats;
         // Slider hanya tampil bila dipilih DAN ada slide aktif; selain itu Hero Teks.
         $useSlider = $hero->hero_type === 'slider' && $this->slides->isNotEmpty();
     @endphp
@@ -21,11 +16,10 @@
                 @foreach ($this->slides as $i => $slide)
                     <div x-show="active === {{ $i }}" x-transition.opacity.duration.700ms class="absolute inset-0">
                         <img src="{{ $slide->image_url }}" alt="{{ $slide->title }}" class="h-full w-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-brand-950/80 to-brand-900/40"></div>
                         <div class="container-page relative flex h-full flex-col justify-center">
-                            <div class="max-w-2xl text-white">
+                            <div class="max-w-2xl text-white" style="text-shadow: 0 2px 14px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.5)">
                                 <h2 class="text-3xl font-extrabold sm:text-5xl">{{ $slide->title }}</h2>
-                                @if ($slide->subtitle)<p class="mt-4 text-lg text-brand-100">{{ $slide->subtitle }}</p>@endif
+                                @if ($slide->subtitle)<p class="mt-4 text-lg text-white/95">{{ $slide->subtitle }}</p>@endif
                                 @if ($slide->button_text && $slide->button_url)
                                     <a href="{{ $slide->button_url }}" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-brand-700 shadow-lg transition hover:bg-brand-50">{{ $slide->button_text }} <x-heroicon-o-arrow-right class="h-4 w-4" /></a>
                                 @endif
@@ -83,7 +77,11 @@
                                     @svg('heroicon-o-' . $stat['icon'], 'h-6 w-6')
                                 </div>
                                 <div class="mt-3 text-3xl font-extrabold text-slate-900">
-                                    <span x-data="{ n: 0 }" x-intersect.once="let t={{ $stat['value'] }}, s=Math.max(1, Math.ceil(t/40)); let i=setInterval(()=>{ n+=s; if(n>=t){n=t; clearInterval(i)} }, 30)" x-text="n">{{ $stat['value'] }}</span>+
+                                    @if ($stat['numeric'])
+                                        <span x-data="{ n: 0 }" x-intersect.once="let t={{ (int) $stat['value'] }}, s=Math.max(1, Math.ceil(t/40)); let i=setInterval(()=>{ n+=s; if(n>=t){n=t; clearInterval(i)} }, 30)" x-text="n">{{ $stat['value'] }}</span>+
+                                    @else
+                                        {{ $stat['value'] }}
+                                    @endif
                                 </div>
                                 <div class="text-xs font-medium text-slate-500">{{ $stat['label'] }}</div>
                             </div>
@@ -106,7 +104,11 @@
             @foreach ($heroStats as $stat)
                 <div class="rounded-2xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-100">
                     <div class="text-2xl font-extrabold text-brand-700">
-                        <span x-data="{ n: 0 }" x-intersect.once="let t={{ $stat['value'] }}, s=Math.max(1, Math.ceil(t/40)); let i=setInterval(()=>{ n+=s; if(n>=t){n=t; clearInterval(i)} }, 30)" x-text="n">{{ $stat['value'] }}</span>+
+                        @if ($stat['numeric'])
+                            <span x-data="{ n: 0 }" x-intersect.once="let t={{ (int) $stat['value'] }}, s=Math.max(1, Math.ceil(t/40)); let i=setInterval(()=>{ n+=s; if(n>=t){n=t; clearInterval(i)} }, 30)" x-text="n">{{ $stat['value'] }}</span>+
+                        @else
+                            {{ $stat['value'] }}
+                        @endif
                     </div>
                     <div class="text-xs text-slate-500">{{ $stat['label'] }}</div>
                 </div>
@@ -141,7 +143,7 @@
                     </div>
                     <div class="flex flex-1 flex-col p-6">
                         <h3 class="text-xl font-bold leading-snug text-slate-900 transition group-hover:text-brand-700">{{ $featured->title }}</h3>
-                        <p class="mt-3 line-clamp-2 text-sm text-slate-500">{{ Str::limit(strip_tags($featured->content), 160) }}</p>
+                        <p class="mt-3 line-clamp-2 text-sm text-slate-500">{{ $featured->summary }}</p>
                         <div class="mt-4 flex items-center gap-4 text-xs text-slate-400">
                             <span class="flex items-center gap-1.5"><x-heroicon-o-calendar class="h-4 w-4" />{{ $featured->created_at->translatedFormat('d M Y') }}</span>
                             <span class="flex items-center gap-1.5"><x-heroicon-o-eye class="h-4 w-4" />{{ number_format($featured->views_count) }}x</span>

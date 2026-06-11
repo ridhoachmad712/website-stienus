@@ -28,42 +28,39 @@
             </select>
         </div>
 
-        <div wire:loading.delay class="mb-4 text-sm text-slate-400">Memuat...</div>
+        <div class="mb-4 flex items-center justify-between">
+            <p class="text-sm text-slate-500">Menampilkan <span class="font-semibold text-slate-700">{{ $this->lecturers->count() }}</span> dosen</p>
+            <span wire:loading.delay class="text-sm text-slate-400">Memuat...</span>
+        </div>
 
         @if ($this->lecturers->isNotEmpty())
-            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
                 @foreach ($this->lecturers as $lecturer)
-                    <article class="group rounded-3xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-lg">
-                        @if ($lecturer->photo)
-                            <img src="{{ Storage::disk('public')->url($lecturer->photo) }}" alt="{{ $lecturer->name }}" class="mx-auto h-24 w-24 rounded-2xl object-cover ring-4 ring-slate-50">
-                        @else
-                            <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700 text-3xl font-bold text-white ring-4 ring-slate-50">
-                                {{ Str::upper(Str::substr($lecturer->name, 0, 1)) }}
-                            </div>
-                        @endif
-                        <h2 class="mt-4 font-bold text-slate-900">{{ $lecturer->name }}{{ $lecturer->title ? ', ' . $lecturer->title : '' }}</h2>
-                        <p class="mt-1 inline-block rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">{{ $lecturer->program?->name }}</p>
-
-                        @if ($lecturer->expertise)
-                            <p class="mt-3 flex items-center justify-center gap-1.5 text-xs text-slate-500"><x-heroicon-o-light-bulb class="h-4 w-4 text-amber-500" />{{ $lecturer->expertise }}</p>
-                        @endif
-
-                        <div class="mt-4 flex items-center justify-center gap-4 border-t border-slate-100 pt-4 text-xs">
-                            <span class="text-slate-400">NIDN: {{ $lecturer->nidn }}</span>
-                            <div class="flex gap-2">
-                                @if ($lecturer->google_scholar_link)
-                                    <a href="{{ $lecturer->google_scholar_link }}" target="_blank" rel="noopener" class="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 text-slate-500 transition hover:bg-brand-600 hover:text-white" title="Google Scholar"><x-heroicon-o-academic-cap class="h-4 w-4" /></a>
-                                @endif
-                                @if ($lecturer->sinta_link)
-                                    <a href="{{ $lecturer->sinta_link }}" target="_blank" rel="noopener" class="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 text-slate-500 transition hover:bg-brand-600 hover:text-white" title="SINTA"><x-heroicon-o-link class="h-4 w-4" /></a>
-                                @endif
-                            </div>
+                    <a href="{{ route('lecturers.show', $lecturer) }}" class="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-xl">
+                        {{-- Foto (ukuran lebih ringkas) --}}
+                        <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700">
+                            @if ($lecturer->photo)
+                                <img src="{{ Storage::disk('public')->url($lecturer->photo) }}" alt="{{ $lecturer->name }}" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                            @else
+                                <div class="flex h-full items-center justify-center">
+                                    <span class="text-5xl font-bold text-white/70">{{ Str::upper(Str::substr($lecturer->name, 0, 1)) }}</span>
+                                </div>
+                            @endif
+                            <span class="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-brand-700 backdrop-blur">{{ $lecturer->program?->name }}</span>
+                            <span class="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-lg bg-white/90 text-brand-700 opacity-0 backdrop-blur transition group-hover:opacity-100"><x-heroicon-o-arrow-right class="h-4 w-4" /></span>
                         </div>
-                    </article>
+
+                        {{-- Info --}}
+                        <div class="flex flex-1 flex-col p-4">
+                            <h2 class="text-sm font-bold leading-snug text-slate-900 transition group-hover:text-brand-700">{{ $lecturer->name }}{{ $lecturer->title ? ', ' . $lecturer->title : '' }}</h2>
+                            @if ($lecturer->expertise)
+                                <p class="mt-1.5 flex items-start gap-1.5 text-xs text-slate-500"><x-heroicon-o-light-bulb class="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />{{ $lecturer->expertise }}</p>
+                            @endif
+                            <span class="mt-auto pt-3 text-[11px] text-slate-400">NIDN {{ $lecturer->nidn }}</span>
+                        </div>
+                    </a>
                 @endforeach
             </div>
-
-            <div class="mt-10">{{ $this->lecturers->links() }}</div>
         @else
             <div class="rounded-3xl bg-white py-20 text-center shadow-sm ring-1 ring-slate-100">
                 <x-heroicon-o-user-group class="mx-auto h-14 w-14 text-slate-300" />
