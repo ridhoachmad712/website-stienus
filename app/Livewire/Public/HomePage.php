@@ -116,6 +116,14 @@ class HomePage extends Component
     }
 
     /**
+     * @return Collection<int, \App\Models\Leader>
+     */
+    public function getLeadersProperty(): Collection
+    {
+        return \App\Models\Leader::query()->where('is_active', true)->orderBy('order')->get();
+    }
+
+    /**
      * @return Collection<int, Testimonial>
      */
     public function getTestimonialsProperty(): Collection

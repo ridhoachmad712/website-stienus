@@ -43,6 +43,13 @@ class HomeSettings extends Settings
 
     public string $programs_subtitle;
 
+    // Leaders / Pimpinan section
+    public string $leaders_eyebrow;
+
+    public string $leaders_title;
+
+    public string $leaders_subtitle;
+
     // Agenda section
     public string $agenda_eyebrow;
 

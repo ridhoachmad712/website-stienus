@@ -109,6 +109,15 @@ class ManageHomeSettings extends SettingsPage
                     ])
                     ->columns(2),
 
+                Forms\Components\Section::make('Bagian Pimpinan')
+                    ->description('Judul section pimpinan di beranda. Kelola daftar orang di menu Pimpinan.')
+                    ->schema([
+                        Forms\Components\TextInput::make('leaders_eyebrow')->label('Label Kecil')->required()->maxLength(255),
+                        Forms\Components\TextInput::make('leaders_title')->label('Judul Bagian')->required()->maxLength(255),
+                        Forms\Components\Textarea::make('leaders_subtitle')->label('Subjudul')->required()->rows(2)->columnSpanFull(),
+                    ])
+                    ->columns(2),
+
                 Forms\Components\Section::make('Bagian Video Profil')
                     ->description('Kosongkan URL video untuk menyembunyikan bagian ini.')
                     ->schema([

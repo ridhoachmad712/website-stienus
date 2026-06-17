@@ -210,6 +210,51 @@
         </section>
     @endif
 
+    {{-- ===== PIMPINAN ===== --}}
+    @if ($this->leaders->isNotEmpty())
+        <section class="bg-slate-50 py-24">
+            <div class="container-page">
+                <div class="mx-auto mb-12 max-w-2xl text-center" data-reveal>
+                    <p class="text-sm font-semibold uppercase tracking-wider text-brand-600">{{ $this->home->leaders_eyebrow }}</p>
+                    <h2 class="mt-1 text-4xl font-extrabold tracking-tight text-slate-900">{{ $this->home->leaders_title }}</h2>
+                    <p class="mt-3 text-slate-500">{{ $this->home->leaders_subtitle }}</p>
+                </div>
+
+                <div x-data="{ slide(dir) { const t = $refs.track; t.scrollBy({ left: dir * t.clientWidth, behavior: 'smooth' }); } }" class="relative" data-reveal>
+                    {{-- tombol navigasi (desktop); mobile cukup swipe --}}
+                    <button type="button" @click="slide(-1)" aria-label="Sebelumnya"
+                        class="absolute -left-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-slate-700 shadow-md ring-1 ring-slate-100 transition hover:bg-brand-600 hover:text-white sm:flex">
+                        <x-heroicon-o-chevron-left class="h-5 w-5" />
+                    </button>
+                    <button type="button" @click="slide(1)" aria-label="Berikutnya"
+                        class="absolute -right-3 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-slate-700 shadow-md ring-1 ring-slate-100 transition hover:bg-brand-600 hover:text-white sm:flex">
+                        <x-heroicon-o-chevron-right class="h-5 w-5" />
+                    </button>
+
+                    <div x-ref="track" class="-mx-3 flex snap-x snap-mandatory items-stretch overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        @foreach ($this->leaders as $leader)
+                            <div class="shrink-0 basis-full snap-start px-3 sm:basis-1/2 lg:basis-1/4">
+                                <div class="group flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand-500/10">
+                                    <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700">
+                                        @if ($leader->photo_url)
+                                            <img src="{{ $leader->photo_url }}" alt="{{ $leader->name }}" loading="lazy" class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105">
+                                        @else
+                                            <div class="flex h-full items-center justify-center text-5xl font-bold text-white/70">{{ Str::upper(Str::substr($leader->name, 0, 1)) }}</div>
+                                        @endif
+                                    </div>
+                                    <div class="flex flex-1 flex-col p-5 text-center">
+                                        <h3 class="font-bold leading-snug text-slate-900">{{ $leader->name }}</h3>
+                                        <p class="mt-1 text-sm font-medium text-brand-600">{{ $leader->position }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+
     {{-- ===== VIDEO PROFIL ===== --}}
     @if ($this->videoEmbedUrl)
         <section class="container-page py-20" data-reveal>

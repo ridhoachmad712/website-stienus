@@ -29,6 +29,7 @@ class Post extends Model
         'featured_image',
         'status',
         'views_count',
+        'created_at',
     ];
 
     /**

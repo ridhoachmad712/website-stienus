@@ -100,6 +100,14 @@ class PostResource extends Resource
                             ->default('draft')
                             ->required()
                             ->native(false),
+                        Forms\Components\DateTimePicker::make('created_at')
+                            ->label('Tanggal Publish')
+                            ->default(now())
+                            ->required()
+                            ->native(false)
+                            ->seconds(false)
+                            ->displayFormat('d M Y H:i')
+                            ->helperText('Tanggal yang ditampilkan sebagai waktu terbit berita di situs.'),
                         Forms\Components\FileUpload::make('featured_image')
                             ->label('Gambar Utama')
                             ->image()
@@ -148,7 +156,7 @@ class PostResource extends Resource
                     ->sortable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tanggal Dibuat')
+                    ->label('Tanggal Publish')
                     ->dateTime('d M Y H:i')
                     ->sortable(),
             ])
