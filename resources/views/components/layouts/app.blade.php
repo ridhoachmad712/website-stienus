@@ -23,6 +23,42 @@
     <meta name="twitter:description" content="{{ $metaDesc }}">
     @if ($ogImage)<meta name="twitter:image" content="{{ $ogImage }}">@endif
 
+    {{-- Structured data (JSON-LD): identitas institusi untuk hasil pencarian Google. --}}
+    @php
+        $orgSchema = array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => 'CollegeOrUniversity',
+            'name' => $general->site_full_name ?: $general->site_name,
+            'alternateName' => $general->site_full_name ? $general->site_name : null,
+            'url' => url('/'),
+            'logo' => $ogImage,
+            'description' => $metaDesc,
+            'telephone' => $general->phone ?: null,
+            'email' => $general->email ?: null,
+            'address' => $general->address ? [
+                '@type' => 'PostalAddress',
+                'streetAddress' => $general->address,
+            ] : null,
+            'sameAs' => array_values(array_filter([
+                $general->social_facebook,
+                $general->social_instagram,
+                $general->social_youtube,
+                $general->social_x,
+            ])),
+        ]);
+        $siteSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => $general->site_name,
+            'url' => url('/'),
+        ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($orgSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    <script type="application/ld+json">{!! json_encode($siteSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @isset($jsonLd)
+        <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @endisset
+
     @if ($general->favicon)
         <link rel="icon" href="{{ Storage::disk('public')->url($general->favicon) }}">
     @endif
@@ -48,6 +84,11 @@
             --color-brand-950: color-mix(in srgb, {{ $c }} 40%, black);
         }
     </style>
+
+    {{-- Jaring pengaman: bila JavaScript mati, jangan sembunyikan konten reveal. --}}
+    <noscript>
+        <style>[data-reveal] { opacity: 1 !important; transform: none !important; }</style>
+    </noscript>
 </head>
 <body class="min-h-screen bg-slate-50 font-sans text-slate-700 antialiased">
     @php

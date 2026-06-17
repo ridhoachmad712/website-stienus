@@ -15,6 +15,8 @@ class ProgramResource extends Resource
 {
     protected static ?string $model = Program::class;
 
+    protected static ?string $recordTitleAttribute = 'name';
+
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
     protected static ?string $navigationGroup = 'Akademik';

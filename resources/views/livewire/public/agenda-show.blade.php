@@ -16,9 +16,9 @@
 
     <div class="container-page max-w-3xl py-12">
         @if ($agenda->image)
-            <img src="{{ Storage::disk('public')->url($agenda->image) }}" alt="{{ $agenda->title }}" class="mb-8 w-full rounded-3xl shadow-md">
+            <img src="{{ Storage::disk('public')->url($agenda->image) }}" alt="{{ $agenda->title }}" loading="lazy" class="mb-8 w-full rounded-3xl shadow-md" data-reveal>
         @endif
-        <div class="prose prose-slate max-w-none">
+        <div class="prose prose-slate max-w-none" data-reveal>
             {!! nl2br(e($agenda->description)) !!}
         </div>
         <div class="mt-12 border-t border-slate-200 pt-6">

@@ -15,7 +15,7 @@
         @if ($this->upcoming->isNotEmpty())
             <div class="grid gap-5 lg:grid-cols-2">
                 @foreach ($this->upcoming as $agenda)
-                    <a href="{{ route('agenda.show', $agenda) }}" class="group flex items-center gap-5 rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-0.5 hover:shadow-md">
+                    <a href="{{ route('agenda.show', $agenda) }}" data-reveal style="--reveal-delay: {{ ($loop->index % 2) * 90 }}ms" class="group flex items-center gap-5 rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-500/10">
                         <div class="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 text-white">
                             <span class="text-2xl font-extrabold leading-none">{{ $agenda->event_date->format('d') }}</span>
                             <span class="text-xs font-medium uppercase">{{ $agenda->event_date->translatedFormat('M Y') }}</span>
@@ -38,7 +38,7 @@
             </h2>
             <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($this->past as $agenda)
-                    <a href="{{ route('agenda.show', $agenda) }}" class="group rounded-3xl bg-white p-5 opacity-90 shadow-sm ring-1 ring-slate-100 transition hover:opacity-100 hover:shadow-md">
+                    <a href="{{ route('agenda.show', $agenda) }}" data-reveal style="--reveal-delay: {{ ($loop->index % 3) * 80 }}ms" class="group rounded-3xl bg-white p-5 opacity-90 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-0.5 hover:opacity-100 hover:shadow-lg hover:shadow-brand-500/10">
                         <p class="text-sm font-semibold text-brand-600">{{ $agenda->event_date->translatedFormat('d F Y') }}</p>
                         <h3 class="mt-1 font-bold text-slate-800 transition group-hover:text-brand-700">{{ $agenda->title }}</h3>
                         <p class="mt-1 flex items-center gap-1.5 text-sm text-slate-500"><x-heroicon-o-map-pin class="h-4 w-4 shrink-0" />{{ $agenda->location }}</p>

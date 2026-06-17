@@ -7,7 +7,7 @@
     </section>
 
     <div class="container-page max-w-2xl py-12">
-        <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+        <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100" data-reveal>
             @if ($submitted)
                 <div class="rounded-2xl bg-emerald-50 p-6 text-center">
                     <x-heroicon-o-check-circle class="mx-auto h-14 w-14 text-emerald-500" />

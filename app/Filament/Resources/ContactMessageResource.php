@@ -14,6 +14,14 @@ class ContactMessageResource extends Resource
 {
     protected static ?string $model = ContactMessage::class;
 
+    protected static ?string $recordTitleAttribute = 'subject';
+
+    /** @return array<int, string> */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email', 'subject'];
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-inbox-arrow-down';
 
     protected static ?string $navigationGroup = 'Penerimaan Mahasiswa';

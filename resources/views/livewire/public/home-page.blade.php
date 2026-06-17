@@ -15,7 +15,8 @@
             <div class="relative h-[60vh] min-h-[380px] overflow-hidden">
                 @foreach ($this->slides as $i => $slide)
                     <div x-show="active === {{ $i }}" x-transition.opacity.duration.700ms class="absolute inset-0">
-                        <img src="{{ $slide->image_url }}" alt="{{ $slide->title }}" class="h-full w-full object-cover">
+                        <img src="{{ $slide->image_url }}" alt="{{ $slide->title }}" class="h-full w-full object-cover transition-transform duration-[7000ms] ease-out" :class="active === {{ $i }} ? 'scale-105' : 'scale-100'">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
                         <div class="container-page relative flex h-full flex-col justify-center">
                             <div class="max-w-2xl text-white" style="text-shadow: 0 2px 14px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.5)">
                                 <h2 class="text-3xl font-extrabold sm:text-5xl">{{ $slide->title }}</h2>
@@ -49,8 +50,8 @@
         <div class="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-brand-500/30 blur-3xl"></div>
         <div class="pointer-events-none absolute -bottom-32 -left-20 h-96 w-96 rounded-full bg-indigo-400/20 blur-3xl"></div>
 
-        <div class="container-page relative grid items-center gap-10 py-20 lg:grid-cols-2 lg:py-28">
-            <div class="text-white">
+        <div class="container-page relative grid items-end gap-10 pt-20 lg:grid-cols-2 lg:pt-28">
+            <div class="text-white pb-20 lg:pb-28">
                 <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-brand-100 ring-1 ring-inset ring-white/20">
                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
                     {{ $hero->hero_badge }}
@@ -67,8 +68,15 @@
                 </div>
             </div>
 
-            {{-- floating stats card --}}
-            <div class="relative hidden lg:block">
+            {{-- floating photo / stats card --}}
+            @if ($this->heroSideImage)
+                <div class="relative hidden self-end lg:block">
+                    <div class="ml-auto max-w-[500px] overflow-hidden rounded-t-3xl">
+                        <img src="{{ $this->heroSideImage }}" alt="" class="block aspect-[4/5] w-full object-cover">
+                    </div>
+                </div>
+            @else
+                <div class="relative hidden self-center lg:block">
                 <div class="ml-auto max-w-md rounded-3xl bg-white/10 p-6 ring-1 ring-inset ring-white/20 backdrop-blur">
                     <div class="grid grid-cols-2 gap-4">
                         @foreach ($heroStats as $stat)
@@ -88,13 +96,9 @@
                         @endforeach
                     </div>
                 </div>
-            </div>
+                </div>
+            @endif
         </div>
-
-        {{-- wave divider --}}
-        <svg class="block w-full text-slate-50" viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none">
-            <path d="M0 60h1440V0c-240 40-480 40-720 20S240-10 0 20v40z" fill="currentColor"/>
-        </svg>
     </section>
     @endunless
 
@@ -119,23 +123,23 @@
     {{-- ===== LATEST NEWS ===== --}}
     @if ($this->latestPosts->isNotEmpty())
         @php $featured = $this->latestPosts->first(); $rest = $this->latestPosts->slice(1, 4); @endphp
-        <section class="container-page py-16">
-            <div class="mb-8 flex items-end justify-between">
+        <section class="container-page py-20" data-reveal>
+            <div class="mb-10 flex items-end justify-between">
                 <div>
                     <p class="text-sm font-semibold uppercase tracking-wider text-brand-600">{{ $this->home->news_eyebrow }}</p>
-                    <h2 class="mt-1 text-3xl font-bold text-slate-900">{{ $this->home->news_title }}</h2>
+                    <h2 class="mt-1 text-4xl font-extrabold tracking-tight text-slate-900">{{ $this->home->news_title }}</h2>
                 </div>
-                <a href="{{ route('posts.index') }}" class="hidden items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700 sm:inline-flex">
-                    Semua berita <x-heroicon-o-arrow-right class="h-4 w-4" />
+                <a href="{{ route('posts.index') }}" class="group hidden items-center gap-1.5 text-sm font-semibold text-brand-600 transition hover:text-brand-700 sm:inline-flex">
+                    Semua berita <x-heroicon-o-arrow-right class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
             </div>
 
             <div class="grid gap-6 lg:grid-cols-2">
                 {{-- featured --}}
-                <a href="{{ route('posts.show', $featured->slug) }}" class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition hover:shadow-xl">
+                <a href="{{ route('posts.show', $featured->slug) }}" class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/10">
                     <div class="relative h-64 overflow-hidden bg-gradient-to-br from-brand-500 to-brand-800">
                         @if ($featured->featured_image)
-                            <img src="{{ Storage::disk('public')->url($featured->featured_image) }}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                            <img src="{{ Storage::disk('public')->url($featured->featured_image) }}" alt="" class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110">
                         @else
                             <div class="flex h-full items-center justify-center"><x-heroicon-o-newspaper class="h-20 w-20 text-white/40" /></div>
                         @endif
@@ -176,17 +180,17 @@
 
     {{-- ===== PROGRAMS ===== --}}
     @if ($this->featuredPrograms->isNotEmpty())
-        <section class="bg-white py-16">
+        <section class="bg-white py-24">
             <div class="container-page">
-                <div class="mx-auto mb-10 max-w-2xl text-center">
+                <div class="mx-auto mb-12 max-w-2xl text-center" data-reveal>
                     <p class="text-sm font-semibold uppercase tracking-wider text-brand-600">{{ $this->home->programs_eyebrow }}</p>
-                    <h2 class="mt-1 text-3xl font-bold text-slate-900">{{ $this->home->programs_title }}</h2>
+                    <h2 class="mt-1 text-4xl font-extrabold tracking-tight text-slate-900">{{ $this->home->programs_title }}</h2>
                     <p class="mt-3 text-slate-500">{{ $this->home->programs_subtitle }}</p>
                 </div>
 
-                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="flex flex-wrap justify-center gap-6">
                     @foreach ($this->featuredPrograms as $program)
-                        <a href="{{ route('programs.show', $program->slug) }}" class="group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg">
+                        <a href="{{ route('programs.show', $program->slug) }}" data-reveal style="--reveal-delay: {{ $loop->index * 90 }}ms" class="group w-full rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition duration-300 ease-out hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-500/10 sm:w-[360px]">
                             <div class="flex items-center justify-between">
                                 <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white">
                                     <x-heroicon-o-academic-cap class="h-6 w-6" />
@@ -202,25 +206,19 @@
                         </a>
                     @endforeach
                 </div>
-
-                <div class="mt-10 text-center">
-                    <a href="{{ route('programs.index') }}" class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
-                        Lihat Semua Program Studi <x-heroicon-o-arrow-right class="h-4 w-4" />
-                    </a>
-                </div>
             </div>
         </section>
     @endif
 
     {{-- ===== VIDEO PROFIL ===== --}}
     @if ($this->videoEmbedUrl)
-        <section class="container-page py-16">
+        <section class="container-page py-20" data-reveal>
             <div class="mx-auto mb-8 max-w-2xl text-center">
                 <p class="text-sm font-semibold uppercase tracking-wider text-brand-600">Video</p>
-                <h2 class="mt-1 text-3xl font-bold text-slate-900">{{ $this->home->video_title }}</h2>
+                <h2 class="mt-1 text-4xl font-extrabold tracking-tight text-slate-900">{{ $this->home->video_title }}</h2>
                 <p class="mt-3 text-slate-500">{{ $this->home->video_subtitle }}</p>
             </div>
-            <div class="mx-auto max-w-4xl overflow-hidden rounded-3xl shadow-lg ring-1 ring-slate-100">
+            <div class="mx-auto max-w-4xl overflow-hidden rounded-3xl shadow-xl ring-1 ring-slate-100">
                 <div class="aspect-video">
                     <iframe src="{{ $this->videoEmbedUrl }}" title="Video Profil" class="h-full w-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
@@ -230,16 +228,16 @@
 
     {{-- ===== AGENDA ===== --}}
     @if ($this->upcomingAgendas->isNotEmpty())
-        <section class="container-page py-16">
-            <div class="mb-8 flex items-end justify-between">
+        <section class="container-page py-20" data-reveal>
+            <div class="mb-10 flex items-end justify-between">
                 <div>
                     <p class="text-sm font-semibold uppercase tracking-wider text-brand-600">{{ $this->home->agenda_eyebrow }}</p>
-                    <h2 class="mt-1 text-3xl font-bold text-slate-900">{{ $this->home->agenda_title }}</h2>
+                    <h2 class="mt-1 text-4xl font-extrabold tracking-tight text-slate-900">{{ $this->home->agenda_title }}</h2>
                 </div>
             </div>
             <div class="grid gap-5 sm:grid-cols-2">
                 @foreach ($this->upcomingAgendas as $agenda)
-                    <div class="flex items-center gap-5 rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition hover:shadow-md">
+                    <div data-reveal style="--reveal-delay: {{ $loop->index * 80 }}ms" class="flex items-center gap-5 rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-500/10">
                         <div class="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 text-white">
                             <span class="text-2xl font-extrabold leading-none">{{ $agenda->event_date->format('d') }}</span>
                             <span class="text-xs font-medium uppercase">{{ $agenda->event_date->translatedFormat('M Y') }}</span>
@@ -256,15 +254,15 @@
 
     {{-- ===== TESTIMONIALS ===== --}}
     @if ($this->testimonials->isNotEmpty())
-        <section class="bg-white py-16">
+        <section class="bg-white py-24">
             <div class="container-page">
-                <div class="mx-auto mb-10 max-w-2xl text-center">
+                <div class="mx-auto mb-12 max-w-2xl text-center" data-reveal>
                     <p class="text-sm font-semibold uppercase tracking-wider text-brand-600">Testimoni</p>
-                    <h2 class="mt-1 text-3xl font-bold text-slate-900">Kata Mereka</h2>
+                    <h2 class="mt-1 text-4xl font-extrabold tracking-tight text-slate-900">Kata Mereka</h2>
                 </div>
                 <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($this->testimonials as $t)
-                        <figure class="flex flex-col rounded-3xl bg-slate-50 p-6 ring-1 ring-slate-100">
+                        <figure data-reveal style="--reveal-delay: {{ $loop->index * 90 }}ms" class="flex flex-col rounded-3xl bg-slate-50 p-6 ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1 hover:bg-white hover:shadow-xl hover:shadow-brand-500/10">
                             <x-heroicon-s-chat-bubble-left-right class="h-8 w-8 text-brand-200" />
                             <blockquote class="mt-3 flex-1 text-sm leading-relaxed text-slate-600">"{{ $t->content }}"</blockquote>
                             <figcaption class="mt-5 flex items-center gap-3">
@@ -287,7 +285,7 @@
 
     {{-- ===== PARTNERS ===== --}}
     @if ($this->partners->isNotEmpty())
-        <section class="container-page py-14">
+        <section class="container-page py-16" data-reveal>
             <p class="mb-8 text-center text-sm font-semibold uppercase tracking-wider text-slate-400">Mitra &amp; Akreditasi</p>
             <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
                 @foreach ($this->partners as $partner)
@@ -300,8 +298,8 @@
     @endif
 
     {{-- ===== CTA ===== --}}
-    <section class="container-page pb-20">
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-700 to-brand-900 px-8 py-14 text-center shadow-xl">
+    <section class="container-page pb-24" data-reveal>
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-700 to-brand-900 px-8 py-16 text-center shadow-xl">
             <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-2xl"></div>
             <h2 class="relative text-3xl font-bold text-white sm:text-4xl">{{ $this->home->cta_title }}</h2>
             <p class="relative mx-auto mt-4 max-w-xl text-brand-100">{{ $this->home->cta_subtitle }}</p>

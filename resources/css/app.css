@@ -7,8 +7,11 @@
 @source '../views';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Easing tokens for fluid, non-mechanical motion */
+    --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
 
     /* Brand palette (indigo-based, academic & modern) */
     --color-brand-50: #eef2ff;
@@ -31,6 +34,24 @@
 
     [x-cloak] {
         display: none !important;
+    }
+
+    /* ===== Scroll reveal (driven by IntersectionObserver in app.js) ===== */
+    @media (prefers-reduced-motion: no-preference) {
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(1.75rem);
+            transition:
+                opacity 0.7s var(--ease-out-soft),
+                transform 0.7s var(--ease-out-soft);
+            transition-delay: var(--reveal-delay, 0ms);
+            will-change: opacity, transform;
+        }
+
+        [data-reveal].is-visible {
+            opacity: 1;
+            transform: none;
+        }
     }
 }
 

@@ -12,7 +12,7 @@
         @if ($this->programs->isNotEmpty())
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($this->programs as $program)
-                    <a href="{{ route('programs.show', $program->slug) }}" class="group rounded-3xl border border-slate-100 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-brand-200 hover:shadow-lg">
+                    <a href="{{ route('programs.show', $program->slug) }}" data-reveal style="--reveal-delay: {{ ($loop->index % 3) * 90 }}ms" class="group rounded-3xl border border-slate-100 bg-white p-7 shadow-sm transition duration-300 ease-out hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-500/10">
                         <div class="flex items-center justify-between">
                             <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white">
                                 <x-heroicon-o-academic-cap class="h-7 w-7" />

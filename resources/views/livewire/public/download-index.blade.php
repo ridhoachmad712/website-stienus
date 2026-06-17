@@ -15,7 +15,7 @@
                 </h2>
                 <div class="grid gap-4 sm:grid-cols-2">
                     @foreach ($items as $item)
-                        <div class="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                        <div data-reveal style="--reveal-delay: {{ ($loop->index % 2) * 90 }}ms" class="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-500/10">
                             <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
                                 <x-heroicon-o-document-text class="h-6 w-6" />
                             </span>

@@ -32,13 +32,20 @@
 
         <div class="mb-4 flex items-center justify-between">
             <p class="text-sm text-slate-500">Menampilkan <span class="font-semibold text-slate-700">{{ $this->staff->count() }}</span> tenaga kependidikan</p>
-            <span wire:loading.delay class="text-sm text-slate-400">Memuat...</span>
         </div>
 
+        {{-- Skeleton saat memfilter/mencari --}}
+        <div wire:loading.delay wire:target="search,unit">
+            <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+                <x-card-skeleton :count="8" />
+            </div>
+        </div>
+
+        <div wire:loading.remove.delay wire:target="search,unit">
         @if ($this->staff->isNotEmpty())
             <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
                 @foreach ($this->staff as $person)
-                    <article class="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-xl">
+                    <article data-reveal style="--reveal-delay: {{ ($loop->index % 4) * 70 }}ms" class="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand-500/10">
                         <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-brand-400 to-brand-700">
                             @if ($person->photo)
                                 <img src="{{ Storage::disk('public')->url($person->photo) }}" alt="{{ $person->name }}" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
@@ -67,5 +74,6 @@
                 <h3 class="mt-4 text-lg font-semibold text-slate-700">Belum ada data tenaga kependidikan</h3>
             </div>
         @endif
+        </div>
     </div>
 </div>

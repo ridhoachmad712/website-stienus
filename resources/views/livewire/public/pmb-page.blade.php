@@ -26,7 +26,7 @@
             <h2 class="mb-8 text-center text-2xl font-bold text-slate-900">Alur Pendaftaran</h2>
             <div class="mb-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach ($a->steps as $i => $step)
-                    <div class="relative rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+                    <div data-reveal style="--reveal-delay: {{ $i * 90 }}ms" class="relative rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand-500/10">
                         <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 text-lg font-bold text-white">{{ $i + 1 }}</span>
                         <h3 class="mt-4 font-bold text-slate-900">{{ $step['title'] }}</h3>
                         <p class="mt-1 text-sm text-slate-500">{{ $step['description'] }}</p>
@@ -37,7 +37,7 @@
 
         <div class="grid gap-8 lg:grid-cols-5">
             {{-- Info --}}
-            <div class="space-y-6 lg:col-span-2">
+            <div class="space-y-6 lg:col-span-2" data-reveal>
                 @if ($a->schedule)
                     <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
                         <h3 class="flex items-center gap-2 font-bold text-slate-900"><x-heroicon-o-calendar-days class="h-5 w-5 text-brand-600" /> Jadwal</h3>
@@ -53,7 +53,7 @@
             </div>
 
             {{-- Form --}}
-            <div class="lg:col-span-3">
+            <div class="lg:col-span-3" data-reveal style="--reveal-delay: 120ms">
                 <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100" id="form">
                     <h2 class="text-2xl font-bold text-slate-900">Formulir Pendaftaran</h2>
 

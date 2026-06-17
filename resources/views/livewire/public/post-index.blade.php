@@ -28,17 +28,22 @@
             </select>
         </div>
 
-        {{-- Loading indicator --}}
-        <div wire:loading.delay class="mb-4 text-sm text-slate-400">Memuat...</div>
+        {{-- Skeleton saat memfilter/mencari --}}
+        <div wire:loading.delay wire:target="search,category">
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <x-card-skeleton :count="6" />
+            </div>
+        </div>
 
         {{-- Grid --}}
+        <div wire:loading.remove.delay wire:target="search,category">
         @if ($this->posts->isNotEmpty())
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($this->posts as $post)
-                    <article class="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-lg">
+                    <article data-reveal style="--reveal-delay: {{ ($loop->index % 3) * 90 }}ms" class="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand-500/10">
                         <a href="{{ route('posts.show', $post->slug) }}" class="relative block h-48 overflow-hidden bg-gradient-to-br from-brand-500 to-brand-800">
                             @if ($post->featured_image)
-                                <img src="{{ Storage::disk('public')->url($post->featured_image) }}" alt="{{ $post->title }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                                <img src="{{ Storage::disk('public')->url($post->featured_image) }}" alt="{{ $post->title }}" class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110">
                             @else
                                 <div class="flex h-full items-center justify-center"><x-heroicon-o-newspaper class="h-14 w-14 text-white/40" /></div>
                             @endif
@@ -66,5 +71,6 @@
                 <p class="mt-1 text-sm text-slate-400">Coba ubah kata kunci atau filter kategori.</p>
             </div>
         @endif
+        </div>
     </div>
 </div>

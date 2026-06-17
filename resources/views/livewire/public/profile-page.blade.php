@@ -9,7 +9,7 @@
 
     <div class="container-page grid gap-8 py-12 lg:grid-cols-4">
         {{-- Sidebar --}}
-        <aside class="lg:col-span-1">
+        <aside class="lg:col-span-1" data-reveal>
             <nav class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
                 @foreach ($this->menu as $key => $item)
                     <a href="{{ route($item['route']) }}"
@@ -27,7 +27,7 @@
 
         {{-- Content --}}
         <div class="lg:col-span-3">
-            <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+            <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100" data-reveal style="--reveal-delay: 100ms">
                 @switch($section)
                     @case('history')
                         <article class="prose prose-slate max-w-none">{!! $p->history ?: '<p class="text-slate-400">Konten sejarah belum diisi.</p>' !!}</article>

@@ -17,7 +17,7 @@
 
     <section class="{{ $secBg }} {{ $py }}">
         <div class="container-page">
-            <div class="mx-auto {{ $inner }}">
+            <div class="mx-auto {{ $inner }}" data-reveal>
                 @switch($block['type'])
                     @case('rich_text')
                         <article class="prose {{ $proseTone }} max-w-none prose-headings:font-bold prose-a:text-brand-600 prose-img:rounded-2xl">{!! $d['content'] ?? '' !!}</article>

@@ -29,14 +29,14 @@
         {{-- Main --}}
         <div class="space-y-6 lg:col-span-2">
             @if ($lecturer->bio)
-                <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+                <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100" data-reveal>
                     <h2 class="flex items-center gap-2 text-xl font-bold text-slate-900"><x-heroicon-o-user class="h-6 w-6 text-brand-600" /> Biografi</h2>
                     <div class="mt-3 whitespace-pre-line leading-relaxed text-slate-600">{{ $lecturer->bio }}</div>
                 </div>
             @endif
 
             @if ($lecturer->education)
-                <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+                <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100" data-reveal>
                     <h2 class="flex items-center gap-2 text-xl font-bold text-slate-900"><x-heroicon-o-academic-cap class="h-6 w-6 text-brand-600" /> Riwayat Pendidikan</h2>
                     <ul class="mt-3 space-y-2">
                         @foreach (preg_split('/\r\n|\r|\n/', trim($lecturer->education)) as $edu)
@@ -49,7 +49,7 @@
             @endif
 
             @if ($lecturer->courses)
-                <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+                <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100" data-reveal>
                     <h2 class="flex items-center gap-2 text-xl font-bold text-slate-900"><x-heroicon-o-book-open class="h-6 w-6 text-brand-600" /> Mata Kuliah Diampu</h2>
                     <div class="mt-3 flex flex-wrap gap-2">
                         @foreach (preg_split('/\r\n|\r|\n|,/', trim($lecturer->courses)) as $course)
@@ -67,7 +67,7 @@
         </div>
 
         {{-- Sidebar --}}
-        <aside class="space-y-6">
+        <aside class="space-y-6" data-reveal style="--reveal-delay: 120ms">
             <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
                 <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Informasi</h3>
                 <dl class="mt-4 space-y-4 text-sm">

@@ -19,10 +19,10 @@
 
     <div class="container-page max-w-3xl py-12">
         @if ($post->featured_image)
-            <img src="{{ Storage::disk('public')->url($post->featured_image) }}" alt="{{ $post->title }}" class="mb-8 w-full rounded-3xl shadow-md">
+            <img src="{{ Storage::disk('public')->url($post->featured_image) }}" alt="{{ $post->title }}" loading="lazy" class="mb-8 w-full rounded-3xl shadow-md" data-reveal>
         @endif
 
-        <div class="space-y-8">
+        <div class="space-y-8" data-reveal>
             @include('partials.content-blocks', ['blocks' => $post->blocks, 'fallback' => $post->content])
         </div>
 
@@ -44,11 +44,11 @@
 
         {{-- Related --}}
         @if ($this->related->isNotEmpty())
-            <div class="mt-12">
+            <div class="mt-12" data-reveal>
                 <h2 class="mb-5 text-xl font-bold text-slate-900">Berita Terkait</h2>
                 <div class="grid gap-5 sm:grid-cols-3">
                     @foreach ($this->related as $item)
-                        <a href="{{ route('posts.show', $item->slug) }}" class="group rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100 transition hover:shadow-md">
+                        <a href="{{ route('posts.show', $item->slug) }}" data-reveal style="--reveal-delay: {{ $loop->index * 90 }}ms" class="group rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-500/10">
                             <span class="text-xs font-semibold text-brand-600">{{ $item->category?->name }}</span>
                             <h3 class="mt-1 line-clamp-2 font-semibold text-slate-800 transition group-hover:text-brand-700">{{ $item->title }}</h3>
                             <p class="mt-2 text-xs text-slate-400">{{ $item->created_at->translatedFormat('d M Y') }}</p>

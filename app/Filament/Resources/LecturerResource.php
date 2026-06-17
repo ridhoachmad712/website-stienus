@@ -14,6 +14,14 @@ class LecturerResource extends Resource
 {
     protected static ?string $model = Lecturer::class;
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    /** @return array<int, string> */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'nidn', 'expertise'];
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationGroup = 'Akademik';

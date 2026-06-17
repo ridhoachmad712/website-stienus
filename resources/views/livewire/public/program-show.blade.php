@@ -21,18 +21,18 @@
         {{-- Main --}}
         <div class="space-y-8 lg:col-span-2">
             @if ($program->vision_mission)
-                <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+                <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100" data-reveal>
                     <h2 class="flex items-center gap-2 text-xl font-bold text-slate-900"><x-heroicon-o-flag class="h-6 w-6 text-brand-600" /> Visi &amp; Misi</h2>
                     <div class="mt-4 whitespace-pre-line leading-relaxed text-slate-600">{{ $program->vision_mission }}</div>
                 </div>
             @endif
 
             {{-- Lecturers --}}
-            <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+            <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100" data-reveal>
                 <h2 class="flex items-center gap-2 text-xl font-bold text-slate-900"><x-heroicon-o-users class="h-6 w-6 text-brand-600" /> Dosen Pengampu <span class="text-base font-normal text-slate-400">({{ $program->lecturers->count() }})</span></h2>
                 <div class="mt-6 grid gap-4 sm:grid-cols-2">
                     @forelse ($program->lecturers as $lecturer)
-                        <div class="flex items-center gap-4 rounded-2xl bg-slate-50 p-4">
+                        <div class="flex items-center gap-4 rounded-2xl bg-slate-50 p-4 transition duration-300 ease-out hover:bg-brand-50">
                             @if ($lecturer->photo)
                                 <img src="{{ Storage::disk('public')->url($lecturer->photo) }}" alt="{{ $lecturer->name }}" class="h-14 w-14 rounded-full object-cover ring-2 ring-white">
                             @else
@@ -51,7 +51,7 @@
         </div>
 
         {{-- Sidebar --}}
-        <aside class="space-y-6">
+        <aside class="space-y-6" data-reveal style="--reveal-delay: 120ms">
             <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
                 <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Informasi</h3>
                 <dl class="mt-4 space-y-4 text-sm">
@@ -65,7 +65,7 @@
             <div class="rounded-3xl bg-gradient-to-br from-brand-600 to-brand-800 p-6 text-white shadow-sm">
                 <h3 class="font-bold">Tertarik Mendaftar?</h3>
                 <p class="mt-2 text-sm text-brand-100">Hubungi tim penerimaan mahasiswa baru untuk informasi lengkap.</p>
-                <a href="/admin" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-50">Daftar Sekarang <x-heroicon-o-arrow-right class="h-4 w-4" /></a>
+                <a href="{{ route('pmb') }}" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-brand-700 transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-brand-50">Daftar Sekarang <x-heroicon-o-arrow-right class="h-4 w-4" /></a>
             </div>
 
             <a href="{{ route('programs.index') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700">

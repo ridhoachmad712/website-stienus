@@ -14,6 +14,14 @@ class StaffResource extends Resource
 {
     protected static ?string $model = Staff::class;
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    /** @return array<int, string> */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'position', 'unit'];
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     protected static ?string $navigationGroup = 'Akademik';

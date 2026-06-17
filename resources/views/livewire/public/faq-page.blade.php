@@ -13,7 +13,7 @@
                 <h2 class="mb-4 text-lg font-bold text-slate-900">{{ $category }}</h2>
                 <div class="space-y-3">
                     @foreach ($items as $faq)
-                        <div x-data="{ open: false }" class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+                        <div x-data="{ open: false }" data-reveal style="--reveal-delay: {{ ($loop->index % 5) * 60 }}ms" class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:shadow-md">
                             <button @click="open = !open" class="flex w-full items-center justify-between gap-4 p-5 text-left">
                                 <span class="font-semibold text-slate-800">{{ $faq->question }}</span>
                                 <x-heroicon-o-plus class="h-5 w-5 shrink-0 text-brand-600 transition" ::class="open && 'rotate-45'" />

@@ -9,7 +9,7 @@
 
     <div class="container-page max-w-3xl space-y-5 py-12">
         @forelse ($this->announcements as $item)
-            <article x-data="{ open: false }" class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+            <article x-data="{ open: false }" data-reveal style="--reveal-delay: {{ ($loop->index % 4) * 70 }}ms" class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:shadow-lg hover:shadow-brand-500/10">
                 <button @click="open = !open" class="flex w-full items-center gap-4 p-5 text-left">
                     <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl {{ $item->is_pinned ? 'bg-amber-50 text-amber-600' : 'bg-brand-50 text-brand-600' }}">
                         <x-heroicon-o-megaphone class="h-6 w-6" />

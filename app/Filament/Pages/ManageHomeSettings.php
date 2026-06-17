@@ -82,6 +82,15 @@ class ManageHomeSettings extends SettingsPage
                             ->label('Tombol 2 — Tautan')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\FileUpload::make('hero_side_image')
+                            ->label('Foto Hero (Sisi Kanan)')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings')
+                            ->imageEditor()
+                            ->maxSize(4096)
+                            ->columnSpanFull()
+                            ->helperText('Opsional. Jika diisi, foto ini menggantikan kartu statistik di sisi kanan hero. Kosongkan untuk menampilkan kartu statistik.'),
                     ])
                     ->columns(2),
 

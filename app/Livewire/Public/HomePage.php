@@ -98,6 +98,16 @@ class HomePage extends Component
     }
 
     /**
+     * Foto sisi kanan hero (menggantikan kartu statistik bila diisi).
+     */
+    public function getHeroSideImageProperty(): ?string
+    {
+        $path = $this->home->hero_side_image;
+
+        return $path ? \Illuminate\Support\Facades\Storage::disk('public')->url($path) : null;
+    }
+
+    /**
      * @return Collection<int, Slider>
      */
     public function getSlidesProperty(): Collection

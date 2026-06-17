@@ -11,7 +11,7 @@
         @if ($this->achievements->isNotEmpty())
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($this->achievements as $item)
-                    <article class="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-1 hover:shadow-lg">
+                    <article data-reveal style="--reveal-delay: {{ ($loop->index % 3) * 90 }}ms" class="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand-500/10">
                         <div class="relative h-44 overflow-hidden bg-gradient-to-br from-amber-400 to-amber-600">
                             @if ($item->image)
                                 <img src="{{ Storage::disk('public')->url($item->image) }}" alt="{{ $item->title }}" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">

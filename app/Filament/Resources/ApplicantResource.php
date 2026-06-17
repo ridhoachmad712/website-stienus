@@ -14,6 +14,14 @@ class ApplicantResource extends Resource
 {
     protected static ?string $model = Applicant::class;
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    /** @return array<int, string> */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email', 'phone', 'program'];
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?string $navigationGroup = 'Penerimaan Mahasiswa';

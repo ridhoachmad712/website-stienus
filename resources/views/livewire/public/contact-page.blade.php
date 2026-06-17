@@ -10,19 +10,19 @@
 
     <div class="container-page grid gap-8 py-12 lg:grid-cols-2">
         {{-- Info + map --}}
-        <div class="space-y-6">
+        <div class="space-y-6" data-reveal>
             <div class="grid gap-4 sm:grid-cols-2">
-                <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md">
                     <x-heroicon-o-map-pin class="h-7 w-7 text-brand-600" />
                     <h3 class="mt-3 font-semibold text-slate-900">Alamat</h3>
                     <p class="mt-1 text-sm text-slate-500">{{ $g->address }}</p>
                 </div>
-                <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md">
                     <x-heroicon-o-phone class="h-7 w-7 text-brand-600" />
                     <h3 class="mt-3 font-semibold text-slate-900">Telepon</h3>
                     <p class="mt-1 text-sm text-slate-500">{{ $g->phone }}</p>
                 </div>
-                <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+                <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md">
                     <x-heroicon-o-envelope class="h-7 w-7 text-brand-600" />
                     <h3 class="mt-3 font-semibold text-slate-900">Email</h3>
                     <p class="mt-1 break-all text-sm text-slate-500">{{ $g->email }}</p>
@@ -48,7 +48,7 @@
         </div>
 
         {{-- Form --}}
-        <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100">
+        <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-100" data-reveal style="--reveal-delay: 120ms">
             <h2 class="text-2xl font-bold text-slate-900">Kirim Pesan</h2>
             @if ($submitted)
                 <div class="mt-6 rounded-2xl bg-emerald-50 p-6 text-center">

@@ -28,6 +28,9 @@ class HomeSettings extends Settings
 
     public string $hero_cta2_url;
 
+    // Foto sisi kanan hero (opsional; menggantikan kartu statistik bila diisi).
+    public ?string $hero_side_image;
+
     // News section
     public string $news_eyebrow;
 

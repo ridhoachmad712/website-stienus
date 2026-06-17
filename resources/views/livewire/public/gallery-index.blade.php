@@ -32,7 +32,8 @@
                     @php $url = $photo->image_url; @endphp
                     <button
                         @click="open = true; src = '{{ $url }}'; caption = @js($photo->title)"
-                        class="group relative aspect-square overflow-hidden rounded-2xl bg-slate-100 shadow-sm ring-1 ring-slate-100"
+                        data-reveal style="--reveal-delay: {{ ($loop->index % 4) * 70 }}ms"
+                        class="group relative aspect-square overflow-hidden rounded-2xl bg-slate-100 shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:shadow-xl hover:shadow-brand-500/10"
                     >
                         <img src="{{ $url }}" alt="{{ $photo->title }}" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-3 opacity-0 transition group-hover:opacity-100">

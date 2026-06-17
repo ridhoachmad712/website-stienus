@@ -44,14 +44,27 @@ class PostShow extends Component
 
     public function render(): View
     {
+        $image = $this->post->featured_image
+            ? Storage::disk('public')->url($this->post->featured_image)
+            : null;
+
         return view('livewire.public.post-show')
             ->title($this->post->title)
             ->layout('components.layouts.app', [
                 'metaDescription' => $this->post->summary,
-                'ogImageUrl' => $this->post->featured_image
-                    ? Storage::disk('public')->url($this->post->featured_image)
-                    : null,
+                'ogImageUrl' => $image,
                 'ogType' => 'article',
+                'jsonLd' => array_filter([
+                    '@context' => 'https://schema.org',
+                    '@type' => 'NewsArticle',
+                    'headline' => $this->post->title,
+                    'description' => $this->post->summary,
+                    'image' => $image,
+                    'datePublished' => $this->post->created_at?->toIso8601String(),
+                    'dateModified' => $this->post->updated_at?->toIso8601String(),
+                    'articleSection' => $this->post->category?->name,
+                    'mainEntityOfPage' => url()->current(),
+                ]),
             ]);
     }
 }

@@ -15,6 +15,14 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
+    protected static ?string $recordTitleAttribute = 'title';
+
+    /** @return array<int, string> */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'summary'];
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $navigationGroup = 'Berita & Informasi';
@@ -166,6 +174,9 @@ class PostResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            ->emptyStateIcon('heroicon-o-newspaper')
+            ->emptyStateHeading('Belum ada berita')
+            ->emptyStateDescription('Publikasikan berita pertama untuk tampil di halaman depan situs.')
             ->defaultSort('created_at', 'desc');
     }
 
