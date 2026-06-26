@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateCustomForm extends CreateRecord
 {
     protected static string $resource = CustomFormResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
