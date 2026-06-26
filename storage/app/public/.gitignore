@@ -1,2 +1,2 @@
-*
-!.gitignore
+# Track semua file upload agar sinkron saat pull ke server
+!*
