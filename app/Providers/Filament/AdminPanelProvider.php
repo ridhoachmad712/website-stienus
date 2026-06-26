@@ -2,9 +2,9 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Widgets\AdmissionStatsOverview;
-use App\Filament\Widgets\ApplicantsByProgramChart;
-use App\Filament\Widgets\ApplicantsPerMonthChart;
+use App\Filament\Widgets\RecentInboxWidget;
+use App\Filament\Widgets\RecentPostsWidget;
+use App\Filament\Widgets\SiteStatsOverview;
 use App\Filament\Widgets\WelcomeWidget;
 use App\Settings\GeneralSettings;
 use App\Settings\ThemeSettings;
@@ -79,19 +79,20 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->navigationGroups([
-                'Berita & Informasi',
                 'Akademik',
-                'Penerimaan Mahasiswa',
+                'Berita & Informasi',
+                'Halaman & Formulir',
                 'Tampilan Beranda',
+                'Penerimaan Mahasiswa',
                 'Pengaturan',
                 'Pengguna & Akses',
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 WelcomeWidget::class,
-                AdmissionStatsOverview::class,
-                ApplicantsPerMonthChart::class,
-                ApplicantsByProgramChart::class,
+                SiteStatsOverview::class,
+                RecentPostsWidget::class,
+                RecentInboxWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

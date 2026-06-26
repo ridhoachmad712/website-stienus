@@ -4,7 +4,7 @@
             <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ $today }}</p>
                 <h2 class="mt-1 text-xl font-bold tracking-tight text-gray-950 dark:text-white">
-                    {{ $greeting }}, {{ $name }} 👋
+                    {{ $greeting }}, {{ $name }}
                 </h2>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Kelola konten dan informasi kampus dari satu tempat.
@@ -12,11 +12,14 @@
             </div>
 
             <div class="flex flex-wrap gap-2">
-                <x-filament::button tag="a" href="{{ \App\Filament\Resources\PostResource::getUrl('create') }}" icon="heroicon-o-plus" size="sm">
+                <x-filament::button tag="a" href="{{ \App\Filament\Resources\PostResource::getUrl('create') }}" icon="heroicon-o-pencil-square" size="sm">
                     Tulis Berita
                 </x-filament::button>
-                <x-filament::button tag="a" href="{{ \App\Filament\Resources\ApplicantResource::getUrl() }}" icon="heroicon-o-clipboard-document-list" color="gray" size="sm">
-                    Pendaftar
+                <x-filament::button tag="a" href="{{ \App\Filament\Resources\AnnouncementResource::getUrl('create') }}" icon="heroicon-o-megaphone" color="gray" size="sm">
+                    Pengumuman
+                </x-filament::button>
+                <x-filament::button tag="a" href="{{ \App\Filament\Resources\MataKuliahResource::getUrl('create') }}" icon="heroicon-o-book-open" color="gray" size="sm">
+                    Input Mata Kuliah
                 </x-filament::button>
                 <x-filament::button tag="a" href="{{ \App\Filament\Resources\ContactMessageResource::getUrl() }}" icon="heroicon-o-inbox-arrow-down" color="gray" size="sm">
                     Pesan Masuk
