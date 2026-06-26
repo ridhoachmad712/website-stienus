@@ -19,6 +19,7 @@ use App\Livewire\Public\PostShow;
 use App\Livewire\Public\ProfilePage;
 use App\Livewire\Public\ProgramIndex;
 use App\Livewire\Public\ProgramShow;
+use App\Livewire\Public\KurikulumIndex;
 use App\Livewire\Public\StaffIndex;
 use App\Models\Agenda;
 use App\Models\Download;
@@ -53,6 +54,7 @@ Route::get('/program-studi/{slug}', ProgramShow::class)->name('programs.show');
 Route::get('/dosen', LecturerIndex::class)->name('lecturers.index');
 Route::get('/dosen/{lecturer}', LecturerShow::class)->name('lecturers.show');
 Route::get('/tendik', StaffIndex::class)->name('staff.index');
+Route::get('/kurikulum', KurikulumIndex::class)->name('kurikulum');
 
 // Berita
 Route::get('/berita', PostIndex::class)->name('posts.index');

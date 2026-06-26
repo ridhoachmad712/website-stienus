@@ -7,8 +7,7 @@
 @source '../views';
 
 @theme {
-    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Google Sans Flex', ui-sans-serif, system-ui, sans-serif;
 
     /* Easing tokens for fluid, non-mechanical motion */
     --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);

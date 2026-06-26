@@ -37,4 +37,9 @@ class Program extends Model
     {
         return $this->hasMany(Lecturer::class)->orderBy('order')->orderBy('name');
     }
+
+    public function mataKuliah(): HasMany
+    {
+        return $this->hasMany(MataKuliah::class)->orderBy('semester')->orderBy('order')->orderBy('nama');
+    }
 }
