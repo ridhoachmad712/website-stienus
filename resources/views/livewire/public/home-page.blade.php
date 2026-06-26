@@ -122,9 +122,10 @@
 
     {{-- ===== LATEST NEWS ===== --}}
     @if ($this->latestPosts->isNotEmpty())
-        @php $featured = $this->latestPosts->first(); $rest = $this->latestPosts->slice(1, 4); @endphp
-        <section class="container-page py-20" data-reveal>
-            <div class="mb-10 flex items-end justify-between">
+        @php $featured = $this->latestPosts->first(); $grid = $this->latestPosts->slice(1, 3); @endphp
+        <section class="container-page py-20">
+            {{-- Header --}}
+            <div class="mb-10 flex items-end justify-between" data-reveal>
                 <div>
                     <p class="text-sm font-semibold uppercase tracking-wider text-brand-600">{{ $this->home->news_eyebrow }}</p>
                     <h2 class="mt-1 text-4xl font-extrabold tracking-tight text-slate-900">{{ $this->home->news_title }}</h2>
@@ -134,46 +135,93 @@
                 </a>
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-2">
-                {{-- featured --}}
-                <a href="{{ route('posts.show', $featured->slug) }}" class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/10">
-                    <div class="relative h-64 overflow-hidden bg-gradient-to-br from-brand-500 to-brand-800">
-                        @if ($featured->featured_image)
-                            <img src="{{ Storage::disk('public')->url($featured->featured_image) }}" alt="" class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110">
-                        @else
-                            <div class="flex h-full items-center justify-center"><x-heroicon-o-newspaper class="h-20 w-20 text-white/40" /></div>
-                        @endif
-                        <span class="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-brand-700 backdrop-blur">{{ $featured->category?->name }}</span>
-                    </div>
-                    <div class="flex flex-1 flex-col p-6">
-                        <h3 class="text-xl font-bold leading-snug text-slate-900 transition group-hover:text-brand-700">{{ $featured->title }}</h3>
-                        <p class="mt-3 line-clamp-2 text-sm text-slate-500">{{ $featured->summary }}</p>
-                        <div class="mt-4 flex items-center gap-4 text-xs text-slate-400">
-                            <span class="flex items-center gap-1.5"><x-heroicon-o-calendar class="h-4 w-4" />{{ $featured->created_at->translatedFormat('d M Y') }}</span>
-                            <span class="flex items-center gap-1.5"><x-heroicon-o-eye class="h-4 w-4" />{{ number_format($featured->views_count) }}x</span>
-                        </div>
-                    </div>
-                </a>
+            {{-- Featured card (magazine style) --}}
+            <a href="{{ route('posts.show', $featured->slug) }}" data-reveal
+               style="height:420px" class="group relative mb-6 flex flex-col w-full overflow-hidden rounded-3xl bg-slate-900 shadow-xl transition duration-500 ease-out hover:shadow-2xl hover:shadow-brand-900/20">
+                {{-- Background image --}}
+                @if ($featured->featured_image)
+                    <img src="{{ Storage::disk('public')->url($featured->featured_image) }}" alt="{{ $featured->title }}"
+                         class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105 opacity-70">
+                @else
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-700 to-brand-950"></div>
+                @endif
 
-                {{-- list --}}
-                <div class="flex flex-col divide-y divide-slate-100 overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-100">
-                    @foreach ($rest as $post)
-                        <a href="{{ route('posts.show', $post->slug) }}" class="group flex gap-4 p-4 transition hover:bg-slate-50">
-                            <div class="flex h-20 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700">
+                {{-- Gradient overlay — aggressive dark so text is always readable --}}
+                <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(2,6,23,0.95) 0%,rgba(2,6,23,0.6) 40%,rgba(2,6,23,0.15) 70%,transparent 100%)"></div>
+
+                {{-- Content --}}
+                <div style="position:absolute;bottom:0;left:0;right:0" class="p-6 sm:p-8">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        @if ($featured->category)
+                            <span class="rounded-full bg-brand-500 px-3 py-1 text-xs font-semibold text-white">
+                                {{ $featured->category->name }}
+                            </span>
+                        @endif
+                        <span class="flex items-center gap-1.5 text-xs text-white/60">
+                            <x-heroicon-o-calendar class="h-3.5 w-3.5" />
+                            {{ $featured->created_at->translatedFormat('d F Y') }}
+                        </span>
+                    </div>
+                    <h3 class="text-xl font-extrabold leading-snug text-white transition group-hover:text-brand-200 sm:text-2xl lg:max-w-3xl">
+                        {{ $featured->title }}
+                    </h3>
+                    <span style="margin-top:14px" class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition group-hover:bg-brand-500">
+                        Baca Selengkapnya <x-heroicon-o-arrow-right class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </span>
+                </div>
+            </a>
+
+            {{-- Grid 3 cards --}}
+            @if ($grid->isNotEmpty())
+                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach ($grid as $post)
+                        <a href="{{ route('posts.show', $post->slug) }}" data-reveal style="--reveal-delay: {{ $loop->index * 100 }}ms"
+                           class="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 transition duration-300 ease-out hover:-translate-y-1.5 hover:shadow-xl hover:shadow-brand-500/10">
+                            {{-- Thumbnail --}}
+                            <div class="relative aspect-video overflow-hidden bg-gradient-to-br from-brand-500 to-brand-800">
                                 @if ($post->featured_image)
-                                    <img src="{{ Storage::disk('public')->url($post->featured_image) }}" alt="" class="h-full w-full object-cover">
+                                    <img src="{{ Storage::disk('public')->url($post->featured_image) }}" alt="{{ $post->title }}"
+                                         loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
                                 @else
-                                    <x-heroicon-o-newspaper class="h-8 w-8 text-white/50" />
+                                    <div class="flex h-full items-center justify-center">
+                                        <x-heroicon-o-newspaper class="h-12 w-12 text-white/30" />
+                                    </div>
+                                @endif
+                                @if ($post->category)
+                                    <span class="absolute bottom-3 left-3 rounded-full bg-black/50 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                                        {{ $post->category->name }}
+                                    </span>
                                 @endif
                             </div>
-                            <div class="min-w-0">
-                                <span class="text-xs font-semibold text-brand-600">{{ $post->category?->name }}</span>
-                                <h4 class="mt-0.5 line-clamp-2 font-semibold text-slate-800 transition group-hover:text-brand-700">{{ $post->title }}</h4>
-                                <p class="mt-1 text-xs text-slate-400">{{ $post->created_at->translatedFormat('d M Y') }}</p>
+
+                            {{-- Content --}}
+                            <div class="flex flex-1 flex-col p-5">
+                                <h4 class="line-clamp-2 font-bold leading-snug text-slate-900 transition group-hover:text-brand-700">
+                                    {{ $post->title }}
+                                </h4>
+                                @if ($post->summary)
+                                    <p class="mt-2 line-clamp-2 flex-1 text-sm text-slate-500">{{ $post->summary }}</p>
+                                @endif
+                                <div class="mt-4 flex items-center justify-between text-xs text-slate-400">
+                                    <span class="flex items-center gap-1.5">
+                                        <x-heroicon-o-calendar class="h-3.5 w-3.5" />
+                                        {{ $post->created_at->translatedFormat('d M Y') }}
+                                    </span>
+                                    <span class="flex items-center gap-1 font-semibold text-brand-600 opacity-0 transition group-hover:opacity-100">
+                                        Baca <x-heroicon-o-arrow-right class="h-3.5 w-3.5" />
+                                    </span>
+                                </div>
                             </div>
                         </a>
                     @endforeach
                 </div>
+            @endif
+
+            {{-- Mobile "Semua berita" link --}}
+            <div class="mt-8 text-center sm:hidden">
+                <a href="{{ route('posts.index') }}" class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600">
+                    Semua berita <x-heroicon-o-arrow-right class="h-4 w-4" />
+                </a>
             </div>
         </section>
     @endif
