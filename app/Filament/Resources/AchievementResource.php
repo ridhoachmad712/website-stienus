@@ -24,7 +24,7 @@ class AchievementResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Prestasi';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {

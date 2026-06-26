@@ -24,7 +24,7 @@ class ActivityResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Log Aktivitas';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 1;
 
     public static function canCreate(): bool
     {

@@ -27,7 +27,7 @@ class MataKuliahResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Mata Kuliah';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

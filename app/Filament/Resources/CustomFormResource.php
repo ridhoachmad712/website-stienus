@@ -18,7 +18,7 @@ class CustomFormResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationGroup = 'Penerimaan Mahasiswa';
+    protected static ?string $navigationGroup = 'Halaman & Formulir';
 
     protected static ?string $navigationLabel = 'Formulir';
 
@@ -26,7 +26,7 @@ class CustomFormResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Formulir';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

@@ -24,7 +24,7 @@ class StatResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Statistik';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

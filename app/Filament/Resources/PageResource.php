@@ -17,7 +17,7 @@ class PageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document';
 
-    protected static ?string $navigationGroup = 'Berita & Informasi';
+    protected static ?string $navigationGroup = 'Halaman & Formulir';
 
     protected static ?string $navigationLabel = 'Halaman';
 
@@ -25,7 +25,7 @@ class PageResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Halaman';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
