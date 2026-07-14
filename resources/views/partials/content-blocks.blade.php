@@ -40,6 +40,38 @@
             </blockquote>
             @break
 
+        @case('table')
+            @php
+                $headers = array_map('trim', explode('|', $d['headers'] ?? ''));
+                $rows = array_filter(array_map('trim', explode("\n", $d['rows'] ?? '')));
+            @endphp
+            <div class="overflow-x-auto rounded-2xl shadow-sm ring-1 ring-slate-200">
+                @if (! empty($d['caption']))
+                    <p class="border-b border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700">{{ $d['caption'] }}</p>
+                @endif
+                <table class="w-full text-sm text-left text-slate-700">
+                    @if (array_filter($headers))
+                        <thead class="bg-brand-700 text-white">
+                            <tr>
+                                @foreach ($headers as $h)
+                                    <th class="px-4 py-3 font-semibold whitespace-nowrap">{{ $h }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                    @endif
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach ($rows as $i => $row)
+                            <tr class="{{ $i % 2 === 0 ? 'bg-white' : 'bg-slate-50' }} hover:bg-brand-50 transition-colors">
+                                @foreach (array_map('trim', explode('|', $row)) as $cell)
+                                    <td class="px-4 py-3">{{ $cell }}</td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @break
+
         @case('cta')
             <div class="rounded-3xl bg-gradient-to-r from-brand-700 to-brand-900 p-8 text-center text-white">
                 @if (! empty($d['title']))<h3 class="text-2xl font-bold">{{ $d['title'] }}</h3>@endif

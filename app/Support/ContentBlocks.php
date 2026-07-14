@@ -83,6 +83,23 @@ class ContentBlocks
                     Forms\Components\TextInput::make('button_url')->label('Tautan Tombol'),
                 ])
                 ->columns(2),
+
+            Forms\Components\Builder\Block::make('table')
+                ->label('Tabel')
+                ->icon('heroicon-o-table-cells')
+                ->schema([
+                    Forms\Components\TextInput::make('caption')->label('Judul Tabel (opsional)'),
+                    Forms\Components\Textarea::make('headers')
+                        ->label('Baris Kepala (pisahkan dengan |)')
+                        ->placeholder('Nama | Jabatan | Email')
+                        ->rows(2)
+                        ->required(),
+                    Forms\Components\Textarea::make('rows')
+                        ->label('Baris Data (satu baris per baris, kolom dipisah dengan |)')
+                        ->placeholder("Ahmad | Dosen | ahmad@stie.ac.id\nBudi | Mahasiswa | budi@stie.ac.id")
+                        ->rows(6)
+                        ->required(),
+                ]),
         ];
     }
 }
