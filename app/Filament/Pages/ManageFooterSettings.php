@@ -21,6 +21,8 @@ class ManageFooterSettings extends SettingsPage
 
     protected static ?string $title = 'Pengaturan Footer';
 
+    protected static ?string $slug = 'pengaturan-footer';
+
     protected static ?int $navigationSort = 6;
 
     public function form(Form $form): Form
