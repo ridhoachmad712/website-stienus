@@ -92,7 +92,7 @@ class ManageFooterSettings extends SettingsPage
                     ->description('Tambahkan kolom bebas dengan judul dan daftar tautan sendiri.')
                     ->schema([
                         Forms\Components\Repeater::make('extra_columns')
-                            ->label(false)
+                            ->label(null)
                             ->schema([
                                 Forms\Components\TextInput::make('title')
                                     ->label('Judul Kolom')
