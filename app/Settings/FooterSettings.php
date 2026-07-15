@@ -15,7 +15,6 @@ class FooterSettings extends Settings
     public bool $show_links_column;
     public string $links_column_title;
     public bool $use_custom_links;
-    /** @var array<int, array{label: string, url: string}> */
     public array $custom_links;
 
     // Kolom 3 — kontak
@@ -27,7 +26,6 @@ class FooterSettings extends Settings
     public string $social_column_title;
 
     // Kolom tambahan bebas
-    /** @var array<int, array{title: string, links: array<int, array{label: string, url: string}>}> */
     public array $extra_columns;
 
     public static function group(): string
