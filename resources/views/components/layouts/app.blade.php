@@ -232,55 +232,124 @@
         </a>
     @endif
 
+    @php
+        $footerCols = collect();
+        if ($footer->show_description) $footerCols->push('description');
+        if ($footer->show_links_column) $footerCols->push('links');
+        if ($footer->show_contact_column) $footerCols->push('contact');
+        if ($footer->show_social_column) $footerCols->push('social');
+        foreach ($footer->extra_columns as $ec) $footerCols->push('extra_'.$loop->index ?? uniqid());
+        $totalCols = $footerCols->count() + count($footer->extra_columns);
+        // grid kolom berdasarkan jumlah kolom aktif
+        $visibleCount = ($footer->show_description ? 1 : 0)
+            + ($footer->show_links_column ? 1 : 0)
+            + ($footer->show_contact_column ? 1 : 0)
+            + ($footer->show_social_column ? 1 : 0)
+            + count($footer->extra_columns);
+        $gridClass = match(true) {
+            $visibleCount >= 4 => 'md:grid-cols-2 lg:grid-cols-4',
+            $visibleCount === 3 => 'md:grid-cols-3',
+            $visibleCount === 2 => 'md:grid-cols-2',
+            default => 'md:grid-cols-1',
+        };
+
+        $socialIcons = [
+            'Facebook'  => 'heroicon-s-user-group',
+            'Instagram' => 'heroicon-s-camera',
+            'YouTube'   => 'heroicon-s-play-circle',
+            'X'         => 'heroicon-s-chat-bubble-left-right',
+        ];
+    @endphp
+
     <footer class="mt-20 bg-slate-900 text-slate-300">
-        <div class="container-page grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
-            <div class="lg:col-span-1">
-                <div class="flex items-center gap-2.5">
-                    @if ($general->logo)
-                        <img src="{{ Storage::disk('public')->url($general->logo) }}" alt="{{ $general->site_name }}" class="h-10 w-auto brightness-0 invert">
-                    @else
-                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white">
-                            <x-heroicon-s-academic-cap class="h-5 w-5" />
-                        </span>
-                        <span class="font-bold text-white">{{ $general->site_name }}</span>
-                    @endif
-                </div>
-                <p class="mt-4 text-sm leading-relaxed text-slate-400">{{ $general->footer_description }}</p>
-            </div>
+        <div class="container-page grid gap-10 py-14 {{ $gridClass }}">
 
-            <div>
-                <h3 class="text-sm font-semibold uppercase tracking-wider text-white">Tautan</h3>
-                <ul class="mt-4 space-y-2.5 text-sm">
-                    @foreach ($footerLinks as $link)
-                        <li><a href="{{ $link->url ?: '#' }}" @if ($link->open_in_new_tab) target="_blank" rel="noopener" @endif class="text-slate-400 transition hover:text-white">{{ $link->label }}</a></li>
-                    @endforeach
-                </ul>
-            </div>
-
-            <div>
-                <h3 class="text-sm font-semibold uppercase tracking-wider text-white">Kontak</h3>
-                <ul class="mt-4 space-y-2.5 text-sm text-slate-400">
-                    <li class="flex items-start gap-2"><x-heroicon-o-map-pin class="mt-0.5 h-4 w-4 shrink-0" /> {{ $general->address }}</li>
-                    <li class="flex items-center gap-2"><x-heroicon-o-phone class="h-4 w-4 shrink-0" /> {{ $general->phone }}</li>
-                    <li class="flex items-center gap-2"><x-heroicon-o-envelope class="h-4 w-4 shrink-0" /> {{ $general->email }}</li>
-                </ul>
-            </div>
-
-            <div>
-                @if (! empty($socials))
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-white">Ikuti Kami</h3>
-                    <div class="mt-4 flex gap-3">
-                        @foreach ($socials as $name => $url)
-                            <a href="{{ $url }}" target="_blank" rel="noopener" class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-800 text-slate-300 transition hover:bg-brand-600 hover:text-white" title="{{ $name }}">
-                                {{ substr($name, 0, 1) }}
-                            </a>
-                        @endforeach
+            {{-- Kolom deskripsi --}}
+            @if ($footer->show_description)
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        @if ($general->logo)
+                            <img src="{{ Storage::disk('public')->url($general->logo) }}" alt="{{ $general->site_name }}" class="h-10 w-auto brightness-0 invert">
+                        @else
+                            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white">
+                                <x-heroicon-s-academic-cap class="h-5 w-5" />
+                            </span>
+                            <span class="font-bold text-white">{{ $general->site_name }}</span>
+                        @endif
                     </div>
-                @endif
-                <a href="/admin" class="mt-6 inline-flex items-center gap-1.5 text-xs text-slate-500 transition hover:text-slate-300">
-                    <x-heroicon-o-lock-closed class="h-3.5 w-3.5" /> Login Dashboard
-                </a>
-            </div>
+                    <p class="mt-4 text-sm leading-relaxed text-slate-400">{{ $general->footer_description }}</p>
+                </div>
+            @endif
+
+            {{-- Kolom tautan --}}
+            @if ($footer->show_links_column)
+                <div>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-white">{{ $footer->links_column_title }}</h3>
+                    <ul class="mt-4 space-y-2.5 text-sm">
+                        @if ($footer->use_custom_links)
+                            @foreach ($footer->custom_links as $link)
+                                <li><a href="{{ $link['url'] }}" class="text-slate-400 transition hover:text-white">{{ $link['label'] }}</a></li>
+                            @endforeach
+                        @else
+                            @foreach ($footerLinks as $link)
+                                <li><a href="{{ $link->url ?: '#' }}" @if ($link->open_in_new_tab) target="_blank" rel="noopener" @endif class="text-slate-400 transition hover:text-white">{{ $link->label }}</a></li>
+                            @endforeach
+                        @endif
+                    </ul>
+                </div>
+            @endif
+
+            {{-- Kolom kontak --}}
+            @if ($footer->show_contact_column)
+                <div>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-white">{{ $footer->contact_column_title }}</h3>
+                    <ul class="mt-4 space-y-2.5 text-sm text-slate-400">
+                        @if (filled($general->address))
+                            <li class="flex items-start gap-2"><x-heroicon-o-map-pin class="mt-0.5 h-4 w-4 shrink-0" /> {{ $general->address }}</li>
+                        @endif
+                        @if (filled($general->phone))
+                            <li class="flex items-center gap-2"><x-heroicon-o-phone class="h-4 w-4 shrink-0" /> {{ $general->phone }}</li>
+                        @endif
+                        @if (filled($general->email))
+                            <li class="flex items-center gap-2"><x-heroicon-o-envelope class="h-4 w-4 shrink-0" /> {{ $general->email }}</li>
+                        @endif
+                    </ul>
+                </div>
+            @endif
+
+            {{-- Kolom sosial media + login --}}
+            @if ($footer->show_social_column)
+                <div>
+                    @if (! empty($socials))
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-white">{{ $footer->social_column_title }}</h3>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            @foreach ($socials as $name => $url)
+                                <a href="{{ $url }}" target="_blank" rel="noopener"
+                                    class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-800 text-slate-300 transition hover:bg-brand-600 hover:text-white"
+                                    title="{{ $name }}">
+                                    {{ substr($name, 0, 1) }}
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
+                    <a href="/admin" class="mt-6 inline-flex items-center gap-1.5 text-xs text-slate-500 transition hover:text-slate-300">
+                        <x-heroicon-o-lock-closed class="h-3.5 w-3.5" /> Login Dashboard
+                    </a>
+                </div>
+            @endif
+
+            {{-- Kolom tambahan --}}
+            @foreach ($footer->extra_columns as $col)
+                <div>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-white">{{ $col['title'] }}</h3>
+                    <ul class="mt-4 space-y-2.5 text-sm">
+                        @foreach ($col['links'] ?? [] as $link)
+                            <li><a href="{{ $link['url'] }}" class="text-slate-400 transition hover:text-white">{{ $link['label'] }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endforeach
+
         </div>
         <div class="border-t border-slate-800">
             <div class="container-page py-5 text-center text-sm text-slate-500">

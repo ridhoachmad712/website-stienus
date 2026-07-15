@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\MenuItem;
+use App\Settings\FooterSettings;
 use App\Settings\GeneralSettings;
 use App\Settings\ThemeSettings;
 use Carbon\Carbon;
@@ -46,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('components.layouts.app', function (\Illuminate\View\View $view): void {
             $view->with('general', app(GeneralSettings::class));
             $view->with('theme', app(ThemeSettings::class));
+            $view->with('footer', app(FooterSettings::class));
 
             // Navigasi dikelola admin via MenuItem; guard agar aman sebelum migrasi.
             $items = Schema::hasTable('menu_items')
