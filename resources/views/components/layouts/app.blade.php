@@ -53,10 +53,10 @@
             'url' => url('/'),
         ];
     @endphp
-    <script type="application/ld+json">{!! json_encode($orgSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
-    <script type="application/ld+json">{!! json_encode($siteSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    <script type="application/ld+json">{!! json_encode($orgSchema, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) !!}</script>
+    <script type="application/ld+json">{!! json_encode($siteSchema, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) !!}</script>
     @isset($jsonLd)
-        <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+        <script type="application/ld+json">{!! json_encode($jsonLd, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) !!}</script>
     @endisset
 
     @if ($general->favicon)
@@ -332,7 +332,8 @@
                             @endforeach
                         </div>
                     @endif
-                    <a href="/admin" class="mt-6 inline-flex items-center gap-1.5 text-xs text-slate-500 transition hover:text-slate-300">
+                    <a href="{{ route('diplomas.index') }}" class="mt-6 block text-sm text-slate-300 hover:text-white">Verifikasi Ijazah</a>
+                    <a href="/admin" class="mt-3 inline-flex items-center gap-1.5 text-xs text-slate-500 transition hover:text-slate-300">
                         <x-heroicon-o-lock-closed class="h-3.5 w-3.5" /> Login Dashboard
                     </a>
                 </div>

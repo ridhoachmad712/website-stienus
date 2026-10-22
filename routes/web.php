@@ -86,6 +86,16 @@ Route::get('/pmb', PmbPage::class)->name('pmb');
 // Kontak
 Route::get('/kontak', ContactPage::class)->name('contact');
 
+// Public verification does not expose a searchable directory of alumni.
+Route::get('/verifikasi-ijazah', [\App\Http\Controllers\DiplomaVerificationController::class, 'index'])
+    ->middleware('throttle:30,1')->name('diplomas.index');
+Route::get('/verifikasi-ijazah/{token}', [\App\Http\Controllers\DiplomaVerificationController::class, 'show'])
+    ->middleware('throttle:60,1')->name('diplomas.verify');
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/ijazah/{diploma}/qr.svg', [\App\Http\Controllers\DiplomaQrController::class, 'download'])->name('diplomas.qr');
+    Route::get('/admin/ijazah/{diploma}/label', [\App\Http\Controllers\DiplomaQrController::class, 'label'])->name('diplomas.label');
+});
+
 // Halaman custom buatan admin
 Route::get('/halaman/{slug}', PageShow::class)->name('pages.show');
 

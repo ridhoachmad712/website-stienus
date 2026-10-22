@@ -34,10 +34,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        if (app()->isProduction()) {
+            throw new \RuntimeException('Seeder data contoh tidak boleh dijalankan di produksi.');
+        }
+
         // Admin user untuk login ke dashboard Filament.
-        $admin = User::updateOrCreate(
+        $admin = User::firstOrCreate(
             ['email' => 'admin@stienusantara.ac.id'],
-            ['name' => 'Administrator', 'password' => bcrypt('password')],
+            ['name' => 'Administrator', 'password' => bcrypt(Str::password(32))],
         );
 
         // Pastikan role super_admin ada & melekat ke admin (akses penuh via Shield).
