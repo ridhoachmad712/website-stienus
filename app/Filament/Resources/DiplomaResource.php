@@ -88,7 +88,8 @@ class DiplomaResource extends Resource implements HasShieldPermissions
             Tables\Filters\SelectFilter::make('status')->label('Status')->options(Diploma::STATUSES),
         ])->actions([
             Tables\Actions\ViewAction::make()->label('Detail'),
-            Tables\Actions\EditAction::make()->visible(fn (Diploma $record) => $record->status === 'draft' && auth()->user()->can('update', $record)),
+            Tables\Actions\EditAction::make()->label('Edit')
+                ->visible(fn (Diploma $record) => in_array($record->status, ['draft', 'revoked'], true) && auth()->user()->can('update', $record)),
             Tables\Actions\Action::make('issue')->label('Terbitkan QR')->icon('heroicon-o-qr-code')->color('success')
                 ->visible(fn (Diploma $record) => $record->status === 'draft' && auth()->user()->can('issue', $record))
                 ->modalHeading('Periksa dan terbitkan QR ijazah')
@@ -119,6 +120,13 @@ class DiplomaResource extends Resource implements HasShieldPermissions
                         app(DiplomaService::class)->revoke($record, auth()->user(), $data['reason']);
                         Notification::make()->title('Status penerbitan dicabut.')->success()->send();
                     }),
+                Tables\Actions\DeleteAction::make()->label('Hapus catatan')
+                    ->visible(fn (Diploma $record) => in_array($record->status, ['draft', 'revoked'], true) && auth()->user()->can('delete', $record))
+                    ->modalHeading('Hapus catatan ijazah')
+                    ->modalDescription(fn (Diploma $record) => $record->status === 'revoked'
+                        ? 'Catatan yang dicabut beserta riwayatnya akan dihapus permanen. QR lama tidak akan menampilkan data apa pun.'
+                        : 'Draf beserta riwayatnya akan dihapus permanen.')
+                    ->successNotificationTitle('Catatan ijazah dihapus.'),
             ]),
         ])->defaultSort('id', 'desc')->emptyStateDescription('Tambahkan data ijazah atau impor CSV, periksa arsipnya, lalu terbitkan QR.');
     }

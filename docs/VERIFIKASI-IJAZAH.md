@@ -45,7 +45,8 @@ Persetujuan di sini adalah pemeriksaan internal kampus, bukan tanda tangan elekt
 ## Koreksi dan pencabutan
 
 - Draf dapat diperbarui. Setiap perubahan dicatat beserta nilai sebelum/sesudah.
-- Data yang telah terbit tidak dapat diedit atau dihapus melalui modul.
+- Ijazah berstatus **Berlaku** maupun **Diganti / diperbaiki** tetap terkunci: tidak dapat diedit atau dihapus melalui modul, karena menopang QR yang telah dicetak.
+- Ijazah yang telah **Dicabut** dapat diperbarui kembali (perubahan tetap dicatat) atau dihapus permanen beserta riwayatnya, bagi petugas dengan izin terkait. Menghapus catatan dicabut membuat QR lama tidak menampilkan data apa pun.
 - Untuk perbaikan, buat draf baru dengan nomor ijazah baru sesuai arsip, pilih catatan yang digantikan, dan isi alasan. NIM harus sama. Saat draf baru diterbitkan, perubahan status lama dan penerbitan baru dilakukan dalam satu transaksi.
 - Untuk pencabutan, isi dasar/alasan minimal 10 karakter. Alasan hanya terlihat oleh petugas.
 - QR lama tetap membuka status **Dicabut** atau **Diganti / diperbaiki**; tidak dialihkan otomatis ke status berlaku.

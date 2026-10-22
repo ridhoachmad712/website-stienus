@@ -31,13 +31,23 @@ class Diploma extends Model
     protected static function booted(): void
     {
         static::updating(function (self $diploma): void {
-            if ($diploma->getOriginal('status') !== 'draft' && $diploma->isDirty([
+            // Issued and superseded records back printed QR codes, so their data
+            // stays locked. Drafts and revoked records may still be corrected.
+            if (in_array($diploma->getOriginal('status'), ['issued', 'superseded'], true) && $diploma->isDirty([
                 ...self::FIELDS, 'public_token', 'verification_url', 'issued_by', 'issued_at',
             ])) {
                 throw new LogicException('Data ijazah yang telah diterbitkan tidak boleh ditimpa. Buat catatan penggantian.');
             }
         });
-        static::deleting(fn () => throw new LogicException('Riwayat ijazah tidak boleh dihapus.'));
+        static::deleting(function (self $diploma): void {
+            // Live and chained records must never disappear from under a printed QR.
+            if (in_array($diploma->status, ['issued', 'superseded'], true)) {
+                throw new LogicException('Ijazah yang berlaku atau menjadi rujukan penggantian tidak boleh dihapus; cabut terlebih dahulu.');
+            }
+            // Detach any draft that still points here, then drop this record's own audit trail.
+            static::where('replaces_id', $diploma->id)->update(['replaces_id' => null]);
+            $diploma->events()->delete();
+        });
     }
 
     public function events(): HasMany

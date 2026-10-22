@@ -24,7 +24,7 @@ class DiplomaPolicy
 
     public function update(User $user, Diploma $diploma): bool
     {
-        return $diploma->status === 'draft' && $user->can('update_diploma');
+        return in_array($diploma->status, ['draft', 'revoked'], true) && $user->can('update_diploma');
     }
 
     public function issue(User $user, Diploma $diploma): bool
@@ -44,7 +44,12 @@ class DiplomaPolicy
 
     public function delete(User $user, Diploma $diploma): bool
     {
-        return false;
+        // Only draft or revoked records are removable; a revoked one needs lifecycle authority.
+        return match ($diploma->status) {
+            'draft' => $user->can('update_diploma'),
+            'revoked' => $user->can('revoke_diploma'),
+            default => false,
+        };
     }
 
     public function deleteAny(User $user): bool

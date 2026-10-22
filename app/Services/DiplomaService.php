@@ -33,10 +33,13 @@ class DiplomaService
         return DB::transaction(function () use ($diploma, $data, $actor) {
             $record = Diploma::lockForUpdate()->findOrFail($diploma->id);
             Gate::forUser($actor)->authorize('update', $record);
-            $this->requireStatus($record, 'draft');
+            if (! in_array($record->status, ['draft', 'revoked'], true)) {
+                throw ValidationException::withMessages(['status' => 'Hanya draf atau ijazah yang dicabut yang dapat diperbarui. Muat ulang halaman sebelum melanjutkan.']);
+            }
             $before = $record->snapshot();
             $record->fill($this->validate($data, $record))->save();
-            $this->record($record, $actor, 'updated', $before, 'Draf diperbarui.');
+            $this->record($record, $actor, 'updated', $before,
+                $record->status === 'revoked' ? 'Data ijazah yang dicabut diperbarui.' : 'Draf diperbarui.');
 
             return $record;
         });

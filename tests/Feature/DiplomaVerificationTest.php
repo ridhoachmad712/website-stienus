@@ -285,4 +285,53 @@ class DiplomaVerificationTest extends TestCase
         }
         $this->assertDatabaseCount('diplomas', 1);
     }
+
+    public function test_revoked_record_can_be_corrected_and_deleted(): void
+    {
+        $diploma = $this->issued();
+        $this->service->revoke($diploma, $this->officer, 'Alasan pencabutan yang cukup panjang.');
+
+        // A revoked record can be edited again, and the correction is audited.
+        $updated = $this->service->updateDraft($diploma->fresh(), $this->data(['student_name' => 'Nama Dikoreksi']), $this->officer);
+        $this->assertSame('Nama Dikoreksi', $updated->fresh()->student_name);
+        $this->assertSame('revoked', $updated->fresh()->status);
+        $this->assertSame('updated', $updated->events()->first()->action);
+
+        // It can also be deleted entirely, taking its own audit trail with it.
+        $id = $diploma->id;
+        $diploma->fresh()->delete();
+        $this->assertDatabaseMissing('diplomas', ['id' => $id]);
+        $this->assertDatabaseCount('diploma_events', 0);
+    }
+
+    public function test_issued_and_superseded_records_still_cannot_be_deleted(): void
+    {
+        $old = $this->issued();
+        $this->issued(['diploma_number' => 'NIN-2025-0002', 'replaces_id' => $old->id, 'correction_reason' => 'Perbaikan ejaan nama sesuai arsip.']);
+
+        foreach ([Diploma::where('status', 'issued')->firstOrFail(), $old->fresh()] as $locked) {
+            try {
+                $locked->delete();
+                $this->fail('Catatan '.$locked->status.' tidak boleh dihapus.');
+            } catch (\LogicException) {
+                // expected
+            }
+        }
+        $this->assertDatabaseCount('diplomas', 2);
+    }
+
+    public function test_admin_can_edit_and_delete_a_revoked_record(): void
+    {
+        $this->actingAs($this->officer);
+        $diploma = $this->issued();
+        $this->service->revoke($diploma, $this->officer, 'Alasan pencabutan yang cukup panjang.');
+
+        $this->get('/admin/ijazah/'.$diploma->id.'/edit')->assertOk();
+        Livewire::test(EditDiploma::class, ['record' => $diploma->id])
+            ->fillForm(['student_name' => 'Nama Revisi'])->call('save')->assertHasNoFormErrors();
+        $this->assertSame('Nama Revisi', $diploma->fresh()->student_name);
+
+        Livewire::test(ListDiplomas::class)->callTableAction('delete', $diploma->fresh())->assertHasNoTableActionErrors();
+        $this->assertDatabaseMissing('diplomas', ['id' => $diploma->id]);
+    }
 }

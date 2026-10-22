@@ -14,7 +14,7 @@ class EditDiploma extends EditRecord
     public function mount(int|string $record): void
     {
         parent::mount($record);
-        abort_unless($this->record->status === 'draft', 403, 'Data ijazah yang telah terbit terkunci.');
+        abort_unless(in_array($this->record->status, ['draft', 'revoked'], true), 403, 'Data ijazah yang berlaku terkunci.');
     }
 
     protected function handleRecordUpdate(Model $record, array $data): Model
