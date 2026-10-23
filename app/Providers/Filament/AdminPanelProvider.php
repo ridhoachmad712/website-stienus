@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\DiplomaStatsOverview;
 use App\Filament\Widgets\RecentInboxWidget;
 use App\Filament\Widgets\RecentPostsWidget;
 use App\Filament\Widgets\SiteStatsOverview;
@@ -91,6 +92,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 WelcomeWidget::class,
                 SiteStatsOverview::class,
+                DiplomaStatsOverview::class,
                 RecentPostsWidget::class,
                 RecentInboxWidget::class,
             ])

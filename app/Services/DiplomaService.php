@@ -110,7 +110,10 @@ class DiplomaService
         $data = Arr::only($data, Diploma::FIELDS);
         foreach ($data as $key => $value) {
             if (is_string($value)) {
-                $data[$key] = trim($value);
+                $value = trim($value);
+                // Sel kosong (mis. dari CSV/Excel) diperlakukan sebagai null
+                // agar aturan "nullable" lolos dan "required" tetap menolak.
+                $data[$key] = $value === '' ? null : $value;
             }
             if ($value instanceof \DateTimeInterface) {
                 $data[$key] = $value->format('Y-m-d');
@@ -120,6 +123,8 @@ class DiplomaService
         return Validator::make($data, [
             'student_name' => 'required|string|max:255',
             'student_number' => 'required|string|max:50',
+            'birth_place' => 'nullable|string|max:120',
+            'birth_date' => 'nullable|date_format:Y-m-d|before_or_equal:today',
             'diploma_number' => ['required', 'string', 'max:100', Rule::unique('diplomas')->ignore($record?->id)],
             'institution_name' => 'required|string|max:255',
             'program_name' => 'required|string|max:255',

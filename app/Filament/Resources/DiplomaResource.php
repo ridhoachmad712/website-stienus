@@ -47,6 +47,10 @@ class DiplomaResource extends Resource implements HasShieldPermissions
                 ->schema([
                     Forms\Components\TextInput::make('student_name')->label('Nama lengkap')->required()->maxLength(255),
                     Forms\Components\TextInput::make('student_number')->label('NIM')->required()->maxLength(50),
+                    Forms\Components\TextInput::make('birth_place')->label('Tempat lahir')->required()->maxLength(120)
+                        ->helperText('Tampil pada badan ijazah: "Lahir di …". Tidak tampil di halaman verifikasi publik.'),
+                    Forms\Components\DatePicker::make('birth_date')->label('Tanggal lahir')->required()->maxDate(now())
+                        ->displayFormat('d F Y'),
                     Forms\Components\TextInput::make('diploma_number')->label('Nomor ijazah / nomor ijazah nasional')->required()->maxLength(100)->unique(ignoreRecord: true),
                     Forms\Components\TextInput::make('institution_name')->label('Nama perguruan tinggi saat penerbitan')->required()->maxLength(255)
                         ->default(fn () => app(GeneralSettings::class)->site_full_name),
@@ -90,6 +94,11 @@ class DiplomaResource extends Resource implements HasShieldPermissions
             Tables\Actions\ViewAction::make()->label('Detail'),
             Tables\Actions\EditAction::make()->label('Edit')
                 ->visible(fn (Diploma $record) => in_array($record->status, ['draft', 'revoked'], true) && auth()->user()->can('update', $record)),
+            Tables\Actions\Action::make('print')
+                ->label(fn (Diploma $record) => $record->status === 'issued' ? 'Cetak ijazah' : 'Pratinjau cetak')
+                ->icon('heroicon-o-printer')->color('primary')
+                ->visible(fn (Diploma $record) => auth()->user()->can('view', $record))
+                ->url(fn (Diploma $record) => route('diplomas.print', $record))->openUrlInNewTab(),
             Tables\Actions\Action::make('issue')->label('Terbitkan QR')->icon('heroicon-o-qr-code')->color('success')
                 ->visible(fn (Diploma $record) => $record->status === 'draft' && auth()->user()->can('issue', $record))
                 ->modalHeading('Periksa dan terbitkan QR ijazah')
