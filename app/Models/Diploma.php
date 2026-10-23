@@ -14,7 +14,8 @@ class Diploma extends Model
     ];
 
     public const FIELDS = [
-        'student_name', 'student_number', 'diploma_number', 'institution_name',
+        'student_name', 'student_number', 'birth_place', 'birth_date',
+        'diploma_number', 'institution_name',
         'program_name', 'degree', 'graduation_date', 'issue_date',
         'source_reference', 'internal_notes', 'replaces_id', 'correction_reason',
     ];
@@ -25,7 +26,21 @@ class Diploma extends Model
 
     protected function casts(): array
     {
-        return ['graduation_date' => 'date', 'issue_date' => 'date', 'issued_at' => 'datetime'];
+        return [
+            'birth_date' => 'date', 'graduation_date' => 'date',
+            'issue_date' => 'date', 'issued_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * Prodi yang dipakai untuk memilih template ijazah: 'manajemen' bila
+     * nama program mengandung "manaj", selain itu 'akuntansi'. Sama dengan
+     * logika activeProgram() pada editor statis.
+     */
+    public function prodiKey(): string
+    {
+        return str_contains(mb_strtolower((string) $this->program_name), 'manaj')
+            ? 'manajemen' : 'akuntansi';
     }
 
     protected static function booted(): void

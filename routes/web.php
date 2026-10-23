@@ -94,6 +94,7 @@ Route::get('/verifikasi-ijazah/{token}', [\App\Http\Controllers\DiplomaVerificat
 Route::middleware('auth')->group(function () {
     Route::get('/admin/ijazah/{diploma}/qr.svg', [\App\Http\Controllers\DiplomaQrController::class, 'download'])->name('diplomas.qr');
     Route::get('/admin/ijazah/{diploma}/label', [\App\Http\Controllers\DiplomaQrController::class, 'label'])->name('diplomas.label');
+    Route::get('/admin/ijazah/{diploma}/cetak', [\App\Http\Controllers\DiplomaPrintController::class, 'show'])->name('diplomas.print');
 });
 
 // Halaman custom buatan admin

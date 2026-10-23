@@ -42,6 +42,7 @@ class DiplomaVerificationTest extends TestCase
     {
         return array_merge([
             'student_name' => 'Nama Alumni Uji', 'student_number' => '0012345678',
+            'birth_place' => 'Makassar', 'birth_date' => '2003-05-02',
             'diploma_number' => 'NIN-2025-0001', 'institution_name' => 'Kampus Uji',
             'program_name' => 'Akuntansi', 'degree' => 'S1 — S.Ak.',
             'graduation_date' => '2025-08-01', 'issue_date' => '2025-08-15',

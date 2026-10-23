@@ -11,7 +11,8 @@ use Illuminate\Validation\ValidationException;
 class DiplomaCsvImporter
 {
     public const COLUMNS = [
-        'student_name', 'student_number', 'diploma_number', 'institution_name',
+        'student_name', 'student_number', 'birth_place', 'birth_date',
+        'diploma_number', 'institution_name',
         'program_name', 'degree', 'graduation_date', 'issue_date', 'source_reference',
     ];
 
