@@ -24,15 +24,15 @@ class DiplomaResource extends Resource implements HasShieldPermissions
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
-    protected static ?string $navigationGroup = 'Akademik';
+    protected static ?string $navigationGroup = 'Ijazah';
 
-    protected static ?string $navigationLabel = 'Verifikasi Ijazah';
+    protected static ?string $navigationLabel = 'Data & Verifikasi Ijazah';
 
     protected static ?string $modelLabel = 'Ijazah';
 
     protected static ?string $pluralModelLabel = 'Ijazah';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 1;
 
     public static function getPermissionPrefixes(): array
     {

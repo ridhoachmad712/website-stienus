@@ -15,7 +15,7 @@ class ManageIjazahSettings extends SettingsPage
 
     protected static string $settings = IjazahSettings::class;
 
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationGroup = 'Ijazah';
 
     protected static ?string $navigationLabel = 'Template Ijazah';
 
@@ -23,7 +23,7 @@ class ManageIjazahSettings extends SettingsPage
 
     protected static ?string $slug = 'pengaturan-ijazah';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 2;
 
     public static function canAccess(): bool
     {

@@ -80,6 +80,10 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->navigationGroups([
+                // Fitur dokumen — terpisah dari pengelolaan website
+                'Ijazah',
+                'Transkrip',
+                // Pengelolaan website
                 'Akademik',
                 'Berita & Informasi',
                 'Halaman & Formulir',

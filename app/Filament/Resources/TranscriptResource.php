@@ -22,15 +22,15 @@ class TranscriptResource extends Resource implements HasShieldPermissions
 
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 
-    protected static ?string $navigationGroup = 'Akademik';
+    protected static ?string $navigationGroup = 'Transkrip';
 
-    protected static ?string $navigationLabel = 'Transkrip Nilai';
+    protected static ?string $navigationLabel = 'Data Transkrip';
 
     protected static ?string $modelLabel = 'Transkrip';
 
     protected static ?string $pluralModelLabel = 'Transkrip';
 
-    protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = 1;
 
     public static function getPermissionPrefixes(): array
     {

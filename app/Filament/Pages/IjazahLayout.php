@@ -13,7 +13,7 @@ class IjazahLayout extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-arrows-pointing-out';
 
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationGroup = 'Ijazah';
 
     protected static ?string $navigationLabel = 'Tata Letak Ijazah';
 
@@ -21,7 +21,7 @@ class IjazahLayout extends Page
 
     protected static ?string $slug = 'tata-letak-ijazah';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 3;
 
     protected static string $view = 'filament.pages.ijazah-layout';
 

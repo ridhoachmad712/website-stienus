@@ -15,7 +15,7 @@ class ManageTranscriptSettings extends SettingsPage
 
     protected static string $settings = TranscriptSettings::class;
 
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static ?string $navigationGroup = 'Transkrip';
 
     protected static ?string $navigationLabel = 'Template Transkrip';
 
@@ -23,7 +23,7 @@ class ManageTranscriptSettings extends SettingsPage
 
     protected static ?string $slug = 'pengaturan-transkrip';
 
-    protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = 2;
 
     public static function canAccess(): bool
     {
