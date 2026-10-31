@@ -29,7 +29,7 @@
   .missing{max-width:680px;margin:30px auto;background:#fff;border:1px solid #efd8a8;border-radius:10px;padding:22px 24px}
   .missing ul{line-height:1.6}
   .page{width:210mm;min-height:297mm;margin:0 auto;background:#fff;padding:12mm 10mm;box-shadow:0 8px 30px #2f405433;
-        font-family:"Times New Roman",Georgia,serif;color:#111}
+        font-family:Cambria,"Times New Roman",Georgia,serif;color:#111}
   .head{display:flex;align-items:center;gap:12px;border-bottom:3px solid #1b2a4a;padding-bottom:6px}
   .head img{height:74px;width:auto}
   .head .ht{flex:1;text-align:center}
