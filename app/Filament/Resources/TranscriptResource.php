@@ -64,7 +64,9 @@ class TranscriptResource extends Resource implements HasShieldPermissions
                         ->helperText('Opsional. Dipakai untuk memfilter katalog mata kuliah saat menambah baris.'),
                     Forms\Components\TextInput::make('faculty')->label('Fakultas')->maxLength(120)->default(fn () => static::s()->faculty),
                     Forms\Components\TextInput::make('department')->label('Jurusan')->maxLength(120)->default(fn () => static::s()->department),
-                    Forms\Components\TextInput::make('study_program')->label('Program studi')->maxLength(120)->default(fn () => static::s()->study_program),
+                    Forms\Components\TextInput::make('study_program')->label('Program studi')->maxLength(120)->default(fn () => static::s()->study_program)
+                        ->datalist(fn () => rescue(fn () => collect(app(\App\Settings\IjazahSettings::class)->prodi_profiles)->pluck('name')->filter()->values()->all(), [], report: false))
+                        ->helperText('Pilihan dari Daftar Program Studi (Template Ijazah), dipakai bersama ijazah & transkrip.'),
                     Forms\Components\TextInput::make('education_program')->label('Program pendidikan')->maxLength(120)->default(fn () => static::s()->education_program),
                     Forms\Components\TextInput::make('concentration')->label('Konsentrasi')->maxLength(120)->default(fn () => static::s()->concentration),
                 ]),

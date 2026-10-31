@@ -21,10 +21,15 @@ class IjazahSettings extends Settings
     public string $nidn_kiri;
     public string $nidn_kanan;
 
-    // Template per-prodi. Kunci tiap array:
-    // pernyataan, akhiran_nama, studi, program, akreditasi_program, pemberian, gelar, hak
-    public array $akuntansi;
-    public array $manajemen;
+    // Kalimat umum ijazah — sama untuk semua prodi, diatur sekali.
+    public string $pernyataan;
+    public string $studi;
+    public string $pemberian;
+    public string $hak;
+
+    // Daftar program studi (bagian yang berbeda saja), dipakai ijazah & transkrip.
+    // Tiap item: name, match, program, degree_suffix, gelar, akreditasi
+    public array $prodi_profiles;
 
     // Posisi tiap blok teks + blok "qr": ['x','y','size','width','align']
     public array $layout;

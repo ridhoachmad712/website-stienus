@@ -17,8 +17,7 @@ class DiplomaPrintController extends Controller
         $composer = new IjazahComposer($settings);
 
         // Kelengkapan yang wajib sebelum ijazah layak dicetak.
-        $prodiKey = $diploma->prodiKey();
-        $prodi = $prodiKey === 'manajemen' ? $settings->manajemen : $settings->akuntansi;
+        $profile = $composer->profileFor($diploma->program_name);
         $missing = [];
         if (blank($diploma->birth_place)) {
             $missing[] = 'Tempat lahir';
@@ -26,8 +25,10 @@ class DiplomaPrintController extends Controller
         if (blank($diploma->birth_date)) {
             $missing[] = 'Tanggal lahir';
         }
-        if (blank($prodi['akreditasi_program'] ?? '')) {
-            $missing[] = 'Akreditasi program studi '.($prodiKey === 'manajemen' ? 'Manajemen' : 'Akuntansi').' (atur di Template Ijazah)';
+        if (blank($profile)) {
+            $missing[] = 'Program studi "'.$diploma->program_name.'" belum terdaftar di Daftar Program Studi (Template Ijazah)';
+        } elseif (blank($profile['akreditasi'] ?? '')) {
+            $missing[] = 'Akreditasi program studi '.($profile['name'] ?? $diploma->program_name).' (atur di Template Ijazah)';
         }
 
         // QR hanya untuk ijazah yang sudah diterbitkan dan jika diaktifkan.

@@ -53,38 +53,33 @@ class ManageIjazahSettings extends SettingsPage
                     Forms\Components\TextInput::make('nidn_kanan')->label('NIDN penandatangan kanan')->required()->maxLength(60),
                 ]),
 
-            Forms\Components\Section::make('Template Akuntansi')
-                ->description('Berlaku saat program studi mengandung kata "Akuntansi".')
-                ->schema($this->programFields('akuntansi')),
-
-            Forms\Components\Section::make('Template Manajemen')
-                ->description('Berlaku saat program studi mengandung kata "Manajemen".')
+            Forms\Components\Section::make('Kalimat Umum Ijazah')
+                ->description('Kalimat yang sama untuk semua prodi — cukup diatur sekali.')
                 ->schema([
-                    Forms\Components\Placeholder::make('tip_manajemen')
-                        ->label('')
-                        ->content('Isi akreditasi Manajemen berdasarkan dokumen resmi sebelum mencetak. Biarkan kosong jika belum tersedia — jangan mengarang nomor/status.')
-                        ->columnSpanFull(),
-                    ...$this->programFields('manajemen'),
+                    Forms\Components\TextInput::make('pernyataan')->label('Kalimat pembuka')->required()->maxLength(255),
+                    Forms\Components\Textarea::make('studi')->label('Kalimat penyelesaian studi')->required()->maxLength(500)->rows(2),
+                    Forms\Components\TextInput::make('pemberian')->label('Kalimat pemberian ijazah')->required()->maxLength(255),
+                    Forms\Components\Textarea::make('hak')->label('Kalimat hak dan kewajiban')->required()->maxLength(500)->rows(2),
+                ]),
+
+            Forms\Components\Section::make('Daftar Program Studi')
+                ->description('Bagian yang berbeda antar prodi. Dipakai bersama oleh ijazah & transkrip. Tambah satu baris per prodi.')
+                ->schema([
+                    Forms\Components\Repeater::make('prodi_profiles')->label(null)
+                        ->schema([
+                            Forms\Components\TextInput::make('name')->label('Nama prodi')->required()->maxLength(80)->helperText('Mis. Akuntansi'),
+                            Forms\Components\TextInput::make('match')->label('Kata kunci pencocokan')->required()->maxLength(80)
+                                ->helperText('Dicocokkan dengan program studi pada data ijazah/transkrip, mis. "akuntansi".'),
+                            Forms\Components\TextInput::make('program')->label('Tulisan program studi')->required()->maxLength(120)
+                                ->helperText('Mis. Program Studi S-1 Akuntansi')->columnSpanFull(),
+                            Forms\Components\TextInput::make('degree_suffix')->label('Gelar setelah nama')->maxLength(40)->helperText('Mis. S.Ak.'),
+                            Forms\Components\TextInput::make('gelar')->label('Gelar yang diberikan')->required()->maxLength(120)->helperText('Mis. SARJANA AKUNTANSI (S.Ak.)'),
+                            Forms\Components\TextInput::make('akreditasi')->label('Akreditasi program studi')->maxLength(255)->columnSpanFull()
+                                ->helperText('Isi sesuai SK resmi; kosongkan bila belum ada (jangan mengarang). Wajib terisi sebelum ijazah prodi ini dicetak.'),
+                        ])->columns(2)
+                        ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+                        ->addActionLabel('Tambah program studi')->reorderable()->collapsible()->defaultItems(0),
                 ]),
         ]);
-    }
-
-    /**
-     * Field teks per-prodi (akuntansi / manajemen).
-     *
-     * @return array<Forms\Components\Component>
-     */
-    private function programFields(string $prodi): array
-    {
-        return [
-            Forms\Components\TextInput::make("{$prodi}.pernyataan")->label('Kalimat pembuka')->required()->maxLength(255),
-            Forms\Components\TextInput::make("{$prodi}.akhiran_nama")->label('Gelar setelah nama mahasiswa')->maxLength(40),
-            Forms\Components\Textarea::make("{$prodi}.studi")->label('Kalimat penyelesaian studi')->required()->maxLength(500)->rows(2),
-            Forms\Components\TextInput::make("{$prodi}.program")->label('Tulisan program studi')->required()->maxLength(120),
-            Forms\Components\TextInput::make("{$prodi}.akreditasi_program")->label('Akreditasi program studi')->maxLength(255),
-            Forms\Components\TextInput::make("{$prodi}.pemberian")->label('Kalimat pemberian ijazah')->required()->maxLength(255),
-            Forms\Components\TextInput::make("{$prodi}.gelar")->label('Gelar yang diberikan')->required()->maxLength(120),
-            Forms\Components\Textarea::make("{$prodi}.hak")->label('Kalimat hak dan kewajiban')->required()->maxLength(500)->rows(2),
-        ];
     }
 }
